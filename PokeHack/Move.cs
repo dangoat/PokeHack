@@ -20,9 +20,10 @@ namespace PokeHack
             Console.WriteLine("Loading Move " + MoveID);
             Fetch(MoveID);
             Name = move.Name;
-            
-            if(move.Accuracy != null)
+
+            if (move.Accuracy != null)
                 Accuracy = (int)move.Accuracy;
+            else Accuracy = 100;
             if(move.EffectChance != null)
                 EffectChance = (int)move.EffectChance;
             if(move.PP != null)
