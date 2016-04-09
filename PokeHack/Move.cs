@@ -14,6 +14,7 @@ namespace PokeHack
         public int Power;
         public string DamageClass;
         public Type Type;
+        public string EffectType;
 
         public Move(PokemonMove ThisMove)
         {
@@ -30,6 +31,7 @@ namespace PokeHack
             if (move.Power != null)
                 Power = (int)move.Power;
 
+            EffectType = move.EffectChanges.;
             DamageClass = move.DamageClass.Name;
             Type = StringToType(move.Type.Name);
 
@@ -44,6 +46,16 @@ namespace PokeHack
         public async Task<PokeAPI.Move> FetchMove(String MoveName)
         {
             return await DataFetcher.GetNamedApiObject<PokeAPI.Move>(MoveName);
+        }
+        public string GetStatus()
+        {
+            Random random = new Random();
+            int EffectHappens = random.next(0, 100);
+            if (EffectHappens > this.EffectChance)
+            {
+                return null;
+            }
+            return this.EffectType;
         }
 
         private Type StringToType(string typename)
