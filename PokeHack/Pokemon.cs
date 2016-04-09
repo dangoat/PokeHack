@@ -16,8 +16,8 @@ namespace PokeHack
 		private int Level;
 		private int HealthMax;
 		public int HealthCurr;
-		private int Attack;
-		private int Defense;
+		public int Attack;
+		public int Defense;
 		private int SpecialAttack;
 		private int SpecialDefense;
         public int Speed;
@@ -111,13 +111,16 @@ namespace PokeHack
 			HealthCurr -= damage;
 		}
 		public int MoveDamage(Move move, Pokemon defender) {
-            int damage = 0;
-            if (String.Compare(move.DamageClass, "physical") == 0) 
-                damage = (int)((((float)(2 * this.Level + 10)/250.0 * (((float) this.Attack) / defender.Defense) + 2) * GetModifier(move.Type, defender.Type1, defender.Type2)));
-            else if(String.Compare(move.DamageClass, "special") == 0)
-                damage = (int)((((float)(2 * this.Level + 10) / 250.0 * (((float) this.SpecialAttack) / defender.SpecialDefense) + 2) * GetModifier(move.Type, defender.Type1, defender.Type2)));
-            Console.WriteLine(move.DamageClass + " " + damage);
-            return damage;
+            double damage = 0;
+            if (String.Compare(move.DamageClass, "physical") == 0)
+            {
+                damage = (double)(2 * this.Level + 10) / 250 * ((double)(this.Attack / defender.Defense) + 2) * move.Power * GetModifier(move.Type, defender.Type1, defender.Type2);
+            }
+            else if (String.Compare(move.DamageClass, "special") == 0)
+                damage = (double)((2 * this.Level + 10) / 250) * ((double)(this.SpecialAttack / defender.SpecialDefense) + 2) * move.Power * GetModifier(move.Type, defender.Type1, defender.Type2);
+            if (move.Type == this.Type1 || move.Type == this.Type2)
+                damage *= 1.5;
+            return (int)damage;
 		}
 		
 		public static double GetModifier(Type attack, Type t1, Type t2)

@@ -18,8 +18,8 @@ namespace PokeHack
             
             Pokemon p1 = new Pokemon(rand.Next(1, 721), 50);
             Pokemon p2 = new Pokemon(rand.Next(1, 721), 50);
-            
-            Console.WriteLine(p1.Name);
+
+            Console.WriteLine(p1.Name + " " + p1.Attack + " " + p1.Defense + " " + p1.HealthCurr + " " + p1.Speed);
             foreach (Move m in p1.MoveSet)
                 Console.WriteLine(m.Name);
 
