@@ -14,18 +14,15 @@ namespace PokeHack
         public int Power;
         public string DamageClass;
         public Type Type;
-        public string EffectType;
 
-        public Move(int MoveID)
+        public Move(PokemonMove ThisMove)
         {
-            Console.WriteLine("Loading Move " + MoveID);
-            Fetch(MoveID);
-            Name = move.Name;
-            // PokeAPI.MoveAilment meta = move.Meta.Value.Ailment;
+            Name = ThisMove.Move.Name;
+            Console.WriteLine("Loading Move " + Name);
+            Fetch(Name);
 
             if (move.Accuracy != null)
                 Accuracy = (int)move.Accuracy;
-            else Accuracy = 100;
             if (move.EffectChance != null)
                 EffectChance = (int)move.EffectChance;
             if (move.PP != null)
@@ -33,32 +30,20 @@ namespace PokeHack
             if (move.Power != null)
                 Power = (int)move.Power;
 
-
             DamageClass = move.DamageClass.Name;
             Type = StringToType(move.Type.Name);
 
         }
 
-        public async void Fetch(int MoveID)
+        public async void Fetch(String MoveName)
         {
-            Task<PokeAPI.Move> MoveTask = FetchMove(MoveID);
+            Task<PokeAPI.Move> MoveTask = FetchMove(MoveName);
             move = MoveTask.Result;
         }
 
-        public async Task<PokeAPI.Move> FetchMove(int MoveID)
+        public async Task<PokeAPI.Move> FetchMove(String MoveName)
         {
-            return await DataFetcher.GetApiObject<PokeAPI.Move>(MoveID);
-        }
-
-        public string GetStatus()
-        {
-            Random random = new Random();
-            int EffectHappens = random.Next(0, 100);
-            if (EffectHappens > this.EffectChance)
-            {
-                return null;
-            }
-            return this.EffectType;
+            return await DataFetcher.GetNamedApiObject<PokeAPI.Move>(MoveName);
         }
 
         private Type StringToType(string typename)
@@ -120,6 +105,6 @@ namespace PokeHack
                     return Type.Water;
             }
         }
-
     }
 }
+
