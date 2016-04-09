@@ -105,7 +105,7 @@ namespace PokeHack
 
         private  static int HitChance(Move m, Pokemon att, Pokemon def)
         {
-            return m.Accuracy * att.Accuracy / def.Evasiveness;
+            return (m.Accuracy != 0)? m.Accuracy : 100 * att.Accuracy / def.Evasiveness;
         }
 
     }
