@@ -39,7 +39,8 @@ namespace PokeHack
             Attack = (Stats[1].BaseValue * 2 * Level / 100) + 5;
             Defense = (Stats[2].BaseValue * 2 * Level / 100) + 5;
             SpecialAttack = (Stats[3].BaseValue * 2 * Level / 100) + 5;
-            SpecialDefense = (Stats[4].BaseValue * 2 * Level / 100) + 5;            Speed = p.Speed;
+            SpecialDefense = (Stats[4].BaseValue * 2 * Level / 100) + 5;
+
             // Happiness = p.Happiness;
             // Weight = p.Weight;
 
