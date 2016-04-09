@@ -14,14 +14,15 @@ namespace PokeHack
 
         public static void Main()
         {
+
             Random rand = new Random();
             
             Pokemon p1 = new Pokemon(rand.Next(1, 721), 50);
             Pokemon p2 = new Pokemon(rand.Next(1, 721), 50);
 
-            Console.WriteLine(p1.Name + " " + p1.Attack + " " + p1.Defense + " " + p1.HealthCurr + " " + p1.Speed);
+            Console.WriteLine(p1.Name + " " + p1.Attack + " " + p1.Defense + " " + p1.SpecialAttack + " " + p1.SpecialDefense + " " + p1.HealthCurr + " " + p1.Speed);
 
-            Console.WriteLine(p2.Name + " " + p2.Attack + " " + p2.Defense + " " + p2.HealthCurr + " " + p2.Speed);
+            Console.WriteLine(p2.Name + " " + p2.Attack + " " + p2.Defense + " " + p2.SpecialAttack + " " + p2.SpecialDefense + " " + p2.HealthCurr + " " + p2.Speed);
 
             while (true)
             {
@@ -59,7 +60,7 @@ namespace PokeHack
                 if (rand.Next(1, 100) < HitChance(p1m, p1, p2)) //Check for miss
                 {
                     p2.TakeDamage(p1.MoveDamage(p1m, p2));
-                    Console.WriteLine(p1.Name + " used " + p1m.Name + " for " + p1.MoveDamage(p1m, p2) + " damage");
+                    Console.WriteLine(p1.Name + " used " + p1m.Name + " " + p1m.Power + " for " + p1.MoveDamage(p1m, p2) + " damage");
                 }
                 else Console.WriteLine(p1.Name + "'s" +  p1m.Name + " missed");
                 if (p2.HealthCurr > 0) //Check for kill
@@ -67,7 +68,7 @@ namespace PokeHack
                     if (rand.Next(1, 100) < HitChance(p2m, p2, p1))
                     {
                         p1.TakeDamage(p2.MoveDamage(p2m, p1));
-                        Console.WriteLine(p2.Name + " used " + p2m.Name + " for " + p2.MoveDamage(p2m, p1) + " damage");
+                        Console.WriteLine(p2.Name + " used " + p2m.Name + " " + p2m.Power + " for " + p2.MoveDamage(p2m, p1) + " damage");
                     }
                     else Console.WriteLine(p2.Name + "'s" + p2m.Name + " missed");
                 }
@@ -77,7 +78,7 @@ namespace PokeHack
                 if (rand.Next(1, 100) < HitChance(p2m, p2, p1))
                 {
                     p1.TakeDamage(p2.MoveDamage(p2m, p1));
-                    Console.WriteLine(p2.Name + " used " + p2m.Name + " for " + p2.MoveDamage(p2m, p1) + " damage");
+                    Console.WriteLine(p2.Name + " used " + p2m.Name + " " + p2m.Power + " for " + p2.MoveDamage(p2m, p1) + " damage");
                 }
                 else Console.WriteLine(p2.Name + "'s" + p2m.Name + " missed");
                 if (p1.HealthCurr > 0)
@@ -85,7 +86,7 @@ namespace PokeHack
                     if (rand.Next(1, 100) < HitChance(p1m, p1, p2))
                     {
                         p2.TakeDamage(p1.MoveDamage(p1m, p2));
-                        Console.WriteLine(p1.Name + " used " + p1m.Name + " for " + p1.MoveDamage(p1m, p2) + " damage");
+                        Console.WriteLine(p1.Name + " used " + p1m.Name + " " + p1m.Power + " for " + p1.MoveDamage(p1m, p2) + " damage");
                     }
                     else Console.WriteLine(p1.Name + "'s" + p1m.Name + " missed");
                 }
