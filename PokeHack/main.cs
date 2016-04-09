@@ -31,12 +31,12 @@ namespace PokeHack
                 }
                 if (p1.HealthCurr < 0)
                 {
-                    Console.WriteLine(p1.Name + " perished horribly");
+                    Console.WriteLine(p1.Name + " has fainted");
                     break;
                 }
                 if (p2.HealthCurr < 0)
                 {
-                    Console.WriteLine(p2.Name + " perished horribly");
+                    Console.WriteLine(p2.Name + " has fainted");
                     break;
                 }
                   
@@ -61,7 +61,7 @@ namespace PokeHack
                     p2.TakeDamage(p1.MoveDamage(p1m, p2));
                     Console.WriteLine(p1.Name + " used " + p1m.Name + " for " + p1.MoveDamage(p1m, p2) + " damage");
                 }
-                else Console.WriteLine(p1.Name + "'s" +  p1m.Name + " missed");
+                else Console.WriteLine(p1.Name + "'s " +  p1m.Name + " missed");
                 if (p2.HealthCurr > 0) //Check for kill
                 { 
                     if (rand.Next(1, 100) < HitChance(p2m, p2, p1))
@@ -69,7 +69,7 @@ namespace PokeHack
                         p1.TakeDamage(p2.MoveDamage(p2m, p1));
                         Console.WriteLine(p2.Name + " used " + p2m.Name + " for " + p2.MoveDamage(p2m, p1) + " damage");
                     }
-                    else Console.WriteLine(p2.Name + "'s" + p2m.Name + " missed");
+                    else Console.WriteLine(p2.Name + "'s " + p2m.Name + " missed");
                 }
             }
             else
@@ -79,7 +79,7 @@ namespace PokeHack
                     p1.TakeDamage(p2.MoveDamage(p2m, p1));
                     Console.WriteLine(p2.Name + " used " + p2m.Name + " for " + p2.MoveDamage(p2m, p1) + " damage");
                 }
-                else Console.WriteLine(p2.Name + "'s" + p2m.Name + " missed");
+                else Console.WriteLine(p2.Name + "'s " + p2m.Name + " missed");
                 if (p1.HealthCurr > 0)
                 {
                     if (rand.Next(1, 100) < HitChance(p1m, p1, p2))
@@ -87,7 +87,7 @@ namespace PokeHack
                         p2.TakeDamage(p1.MoveDamage(p1m, p2));
                         Console.WriteLine(p1.Name + " used " + p1m.Name + " for " + p1.MoveDamage(p1m, p2) + " damage");
                     }
-                    else Console.WriteLine(p1.Name + "'s" + p1m.Name + " missed");
+                    else Console.WriteLine(p1.Name + "'s " + p1m.Name + " missed");
                 }
             }
         }

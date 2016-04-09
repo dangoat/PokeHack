@@ -22,8 +22,6 @@ namespace PokeHack
             Console.WriteLine("Loading Move " + Name);
             Fetch(Name);
 
-            MoveMetadata meta = (MoveMetadata) move.Meta;
-            meta.Ailment.Name;
 
             if (move.Accuracy != null)
                 Accuracy = (int)move.Accuracy;
@@ -34,7 +32,8 @@ namespace PokeHack
             if (move.Power != null)
                 Power = (int)move.Power;
 
-            EffectType = move.EffectChanges.;
+            MoveMetadata meta = (MoveMetadata)move.Meta;
+            EffectType = meta.Ailment.Name;
             DamageClass = move.DamageClass.Name;
             Type = StringToType(move.Type.Name);
 
@@ -53,7 +52,7 @@ namespace PokeHack
         public string GetStatus()
         {
             Random random = new Random();
-            int EffectHappens = random.next(0, 100);
+            int EffectHappens = random.Next(0, 100);
             if (EffectHappens > this.EffectChance)
             {
                 return null;
