@@ -30,11 +30,13 @@ namespace PokeHack
 
         public Pokemon(int PokemonID, int level)
         {
-            Console.WriteLine("Loading Pokemon " + PokemonID);
+            Console.Write("Loading Pokemon " + PokemonID);
             Fetch(PokemonID);
 
             Level = level;
             Name = Poke.Name;
+
+            Console.Write(" - " + Name + "\n");
 
             PokemonStats[] Stats = Poke.Stats;
 
@@ -45,6 +47,7 @@ namespace PokeHack
             Defense = (Stats[2].BaseValue * 2 * Level / 100) + 5;
             SpecialAttack = (Stats[3].BaseValue * 2 * Level / 100) + 5;
             SpecialDefense = (Stats[4].BaseValue * 2 * Level / 100) + 5;
+            Speed = (Stats[5].BaseValue * 2 * Level / 100) + 5;
 
             // Happiness = p.Happiness;
             // Weight = p.Weight;
@@ -59,26 +62,29 @@ namespace PokeHack
             //Randomly selects moves
             PokemonMove[] PossibleMoves = Poke.Moves;
 
-            Random rand = new Random();
-            int[] UsedMoves = new int[4];
-            for(int i = 0; i < 4; i++)
+            if (PossibleMoves.Length > 4)
             {
-                bool alreadyHas;
-                int randNum;
-                do
+                Random rand = new Random();
+                int[] UsedMoves = new int[4];
+                for (int i = 0; i < 4; i++)
                 {
-                    alreadyHas = false;
-                    randNum = rand.Next(1, PossibleMoves.Length);
-                    foreach (int used in UsedMoves)
-                        if (used == randNum)
-                            alreadyHas = true;
-                } while (alreadyHas);
+                    bool alreadyHas;
+                    int randNum;
+                    do
+                    {
+                        alreadyHas = false;
+                        randNum = rand.Next(1, PossibleMoves.Length);
+                        foreach (int used in UsedMoves)
+                            if (used == randNum)
+                                alreadyHas = true;
+                    } while (alreadyHas);
 
-                MoveSet[i] = new Move(PossibleMoves[randNum]);
-                UsedMoves[i] = randNum;
-            }
-                
-            
+                    MoveSet[i] = new Move(PossibleMoves[randNum]);
+                    UsedMoves[i] = randNum;
+                }
+            } else
+                for(int i = 0; i < PossibleMoves.Length; i++)
+                    MoveSet[i] = new Move(PossibleMoves[i]);
 
         }
 	
