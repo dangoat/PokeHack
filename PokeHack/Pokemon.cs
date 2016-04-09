@@ -87,6 +87,8 @@ namespace PokeHack
 	
         public async void Fetch(int PokemonID)
         {
+            if (PokemonID == 132)
+                PokemonID++;
             Task<PokeAPI.Pokemon> PokeTask = FetchPokemon(PokemonID);
             Poke = PokeTask.Result;
         }
@@ -106,11 +108,12 @@ namespace PokeHack
 			HealthCurr -= damage;
 		}
 		public int MoveDamage(Move move, Pokemon defender) {
-            int damage;
+            int damage = 0;
             if (String.Compare(move.DamageClass, "physical") == 0) 
                 damage = (int)((((float)(2 * this.Level + 10)/250 * (this.Attack /	defender.Defense) + 2) * GetModifier(move.Type, defender.Type1, defender.Type2)));
-            else
+            else if(String.Compare(move.DamageClass, "special") == 0)
                 damage = (int)((((float)(2 * this.Level + 10) / 250 * (this.SpecialAttack / defender.SpecialDefense) + 2) * GetModifier(move.Type, defender.Type1, defender.Type2)));
+            Console.WriteLine(move.DamageClass + " " + damage);
             return damage;
 		}
 		
