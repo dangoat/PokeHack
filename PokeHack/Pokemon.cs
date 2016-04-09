@@ -52,7 +52,12 @@ namespace PokeHack
             //Type = p.Types[Name];
 
         }
-
+        
+       	public Move[] GetMoves()
+        {
+            return this.MoveSet;
+        }
+	
         public async void FetchPokemon(int PokemonID)
         {
             Poke = await DataFetcher.GetApiObject<PokeAPI.Pokemon>(PokemonID);
