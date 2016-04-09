@@ -48,7 +48,26 @@ namespace PokeHack
             Console.ReadLine();
         }
 
+        //Given p1 and p2, returns how many turns p1 needs to win with a greedy strategy
+        public static int CalculateClock(Pokemon p1, Pokemon p2)
+        {
+            int health = p2.HealthCurr, clock = 0;
+            Move move = PickMoveHighestPower(p1, p2);
+
+            while(health > 0)
+            {
+                health -= p1.MoveDamage(move, p2);
+                clock++;
+            }
+            return clock;
+        }
+
         public static void CombatRound(Pokemon p1, Pokemon p2)
+        {
+
+        }
+
+        public static void PrimitiveCombatRound(Pokemon p1, Pokemon p2)
         {
             Move p1m = null, p2m = null;
             Random rand = new Random();
