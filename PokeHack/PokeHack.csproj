@@ -39,8 +39,12 @@
     <Compile Include="Pokemon.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="PokeApi.NET">
+      <HintPath>..\..\..\PokeAPI\PokeApi.NET\bin\Debug\PokeApi.NET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

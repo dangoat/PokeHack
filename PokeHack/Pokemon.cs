@@ -1,15 +1,15 @@
 using System;
 using PokeAPI;
 
-
 // [...]
 
 
-namespace Application
+namespace PokeHack
 {
 	public class Pokemon	//Put everything in here
 	{
-		private PokemonSpecies p;
+		private PokeAPI.Pokemon Poke;
+        private PokeAPI.PokemonSpecies Species;
 		private Move[] MoveSet = new Move[4];
 		private int Level;
 		private int HealthMax;
@@ -26,28 +26,38 @@ namespace Application
 		private string Type1;
 		private string Type2 = null;
 
-		public Pokemon (int PokemonID, int level)
-		{
-			p = await DataFetcher.GetApiObject<PokemonSpecies>(PokemonID);
-			Level = level;
-			HealthMax = p.hp;
-			HealthCurr = HealthMax;
-			//p = await DataFetcher.GetNamedApiObject<PokemonSpecies>("lucario");
-			Attack = p.Attack;
-			Defense = p.Defense;
-			SpecialAttack = p.SpAtk;
-			SpecialDefense = p.SpDef;
-			Speed = p.Speed;
-			Happiness = p.Happiness;
-			Weight = p.Weight;
-			Type1 = p.Types[1]["name"];
-			if (Types.length > 1) {
-				Type2 = p.Types[2]["name"];
-			}
-			//Type = p.Types[Name];
+        public Pokemon(int PokemonID, int level)
+        {
+            FetchPokemon(PokemonID);
+            Level = level;
 
-		}
-		public int TakeDamage(int damage) {
+            
+            HealthMax = p.;
+            HealthCurr = HealthMax;
+
+            Attack = p.Attack;
+            Defense = p.Defense;
+            SpecialAttack = p.SpAtk;
+            SpecialDefense = p.SpDef;
+            Speed = p.Speed;
+            Happiness = p.Happiness;
+            Weight = p.Weight;
+            Type1 = p.Types[1]["name"];
+            if (Types.length > 1)
+            {
+                Type2 = p.Types[2]["name"];
+            }
+            //Type = p.Types[Name];
+
+        }
+
+        public async void FetchPokemon(int PokemonID)
+        {
+            Poke = await DataFetcher.GetApiObject<PokeAPI.Pokemon>(PokemonID);
+            Species = await DataFetcher.GetApiObject<PokemonSpecies>(PokemonID);
+        }
+
+        public int TakeDamage(int damage) {
 			HealthCurr -= damage;
 		}
 		public int UseMove(Move move, Pokemon defender) {
