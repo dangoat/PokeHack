@@ -40,14 +40,14 @@ namespace PokeHack
 
             PokemonStats[] Stats = Poke.Stats;
 
-            HealthMax = (Stats[0].BaseValue * 2 * Level / 100) + 10 + Level;
+            HealthMax = (Stats[5].BaseValue * 2 * Level / 100) + 10 + Level;
             HealthCurr = HealthMax;
 
-            Attack = (Stats[1].BaseValue * 2 * Level / 100) + 5;
-            Defense = (Stats[2].BaseValue * 2 * Level / 100) + 5;
-            SpecialAttack = (Stats[3].BaseValue * 2 * Level / 100) + 5;
-            SpecialDefense = (Stats[4].BaseValue * 2 * Level / 100) + 5;
-            Speed = (Stats[5].BaseValue * 2 * Level / 100) + 5;
+            Attack = (Stats[4].BaseValue * 2 * Level / 100) + 5;
+            Defense = (Stats[3].BaseValue * 2 * Level / 100) + 5;
+            SpecialAttack = (Stats[2].BaseValue * 2 * Level / 100) + 5;
+            SpecialDefense = (Stats[1].BaseValue * 2 * Level / 100) + 5;
+            Speed = (Stats[0].BaseValue * 2 * Level / 100) + 5;
 
             // Happiness = p.Happiness;
             // Weight = p.Weight;
