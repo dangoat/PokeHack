@@ -58,16 +58,18 @@ namespace PokeHack
             {
                 if (rand.Next(1, 100) < HitChance(p1m, p1, p2)) //Check for miss
                 {
-                    p2.TakeDamage(p1.MoveDamage(p1m, p2));
-                    Console.WriteLine(p1.Name + " used " + p1m.Name + " for " + p1.MoveDamage(p1m, p2) + " damage");
+                    int damage = p1.MoveDamage(p1m, p2);
+                    p2.TakeDamage(damage);
+                    Console.WriteLine(p1.Name + " used " + p1m.Name + " for " + damage + " damage");
                 }
                 else Console.WriteLine(p1.Name + "'s " +  p1m.Name + " missed");
                 if (p2.HealthCurr > 0) //Check for kill
                 { 
                     if (rand.Next(1, 100) < HitChance(p2m, p2, p1))
                     {
-                        p1.TakeDamage(p2.MoveDamage(p2m, p1));
-                        Console.WriteLine(p2.Name + " used " + p2m.Name + " for " + p2.MoveDamage(p2m, p1) + " damage");
+                        int damage = p2.MoveDamage(p2m, p1);
+                        p1.TakeDamage(damage);
+                        Console.WriteLine(p2.Name + " used " + p2m.Name + " for " + damage + " damage");
                     }
                     else Console.WriteLine(p2.Name + "'s " + p2m.Name + " missed");
                 }
@@ -78,6 +80,12 @@ namespace PokeHack
                 {
                     p1.TakeDamage(p2.MoveDamage(p2m, p1));
                     Console.WriteLine(p2.Name + " used " + p2m.Name + " for " + p2.MoveDamage(p2m, p1) + " damage");
+                    if (p2m.HasStatus())
+                    {
+                        p1.Ailment = p2m.GetStatus();
+                        if (p1.Ailment.CompareTo("") != 0)
+                            Console.WriteLine(p1.Name + " has become " + p1.Ailment);
+                    }
                 }
                 else Console.WriteLine(p2.Name + "'s " + p2m.Name + " missed");
                 if (p1.HealthCurr > 0)
@@ -86,11 +94,18 @@ namespace PokeHack
                     {
                         p2.TakeDamage(p1.MoveDamage(p1m, p2));
                         Console.WriteLine(p1.Name + " used " + p1m.Name + " for " + p1.MoveDamage(p1m, p2) + " damage");
+                        if (p1m.HasStatus())
+                        {
+                            p2.Ailment = p1m.GetStatus();
+                            if (p2.Ailment.CompareTo("") != 0)
+                                Console.WriteLine(p2.Name + " has become " + p2.Ailment);
+                        }
                     }
                     else Console.WriteLine(p1.Name + "'s " + p1m.Name + " missed");
                 }
             }
         }
+        
         //Picks move based on highest damage possible.
         //p1 is attacker, p2 is defender
         private static Move PickMoveHighestPower(Pokemon p1, Pokemon p2)

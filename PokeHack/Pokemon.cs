@@ -10,7 +10,6 @@ namespace PokeHack
 	public class Pokemon	//Put everything in here
 	{
 		private PokeAPI.Pokemon Poke;
-        private PokeAPI.PokemonSpecies Species;
         public Move[] MoveSet = new Move[4];
         public String Name = "missing";
 		private int Level;
@@ -27,12 +26,15 @@ namespace PokeHack
 		private int Weight;
 		private Type Type1;
         private Type Type2 = Type.None;
+        public String Ailment = "";
 
         public Pokemon(int PokemonID, int level)
         {
+            // Fetch the Pokemon data
             Console.Write("Loading Pokemon " + PokemonID);
             Fetch(PokemonID);
 
+            // Set Stats
             Level = level;
             Name = Poke.Name;
 
@@ -52,6 +54,7 @@ namespace PokeHack
             // Happiness = p.Happiness;
             // Weight = p.Weight;
 
+            // Set Types
             PokemonTypeMap[] Types = Poke.Types;
             Type1 = StringToType(Types[0].Type.Name);
             if (Types.Length > 1)
@@ -110,6 +113,7 @@ namespace PokeHack
         public void TakeDamage(int damage) {
 			HealthCurr -= damage;
 		}
+
 		public int MoveDamage(Move move, Pokemon defender) {
             double damage = 0;
             if (String.Compare(move.DamageClass, "physical") == 0)
