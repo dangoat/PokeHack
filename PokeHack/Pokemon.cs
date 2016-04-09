@@ -57,9 +57,27 @@ namespace PokeHack
             }
 
             //Randomly selects moves
+            PokemonMove[] PossibleMoves = Poke.Moves;
+
             Random rand = new Random();
+            int[] UsedMoves = new int[4];
             for(int i = 0; i < 4; i++)
-                MoveSet[i] = new Move(rand.Next(1, 621));
+            {
+                bool alreadyHas;
+                int randNum;
+                do
+                {
+                    alreadyHas = false;
+                    randNum = rand.Next(1, PossibleMoves.Length);
+                    foreach (int used in UsedMoves)
+                        if (used == randNum)
+                            alreadyHas = true;
+                } while (alreadyHas);
+
+                MoveSet[i] = new Move(PossibleMoves[randNum]);
+                UsedMoves[i] = randNum;
+            }
+                
             
 
         }
