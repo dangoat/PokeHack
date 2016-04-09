@@ -30,6 +30,7 @@ namespace PokeHack
         public Pokemon(int PokemonID, int level)
         {
             FetchPokemon(PokemonID);
+            System.Threading.Thread.Sleep(5000);
             Level = level;
             Name = Poke.Name;
 
@@ -65,6 +66,11 @@ namespace PokeHack
         {
             Poke = await DataFetcher.GetApiObject<PokeAPI.Pokemon>(PokemonID);
             Species = await DataFetcher.GetApiObject<PokemonSpecies>(PokemonID);
+
+            if(Poke == null || Species == null)
+            {
+                Console.WriteLine("API Retrieval is null");
+            }
         }
 
         public void TakeDamage(int damage) {
