@@ -1,5 +1,6 @@
 using System;
 using PokeAPI;
+using System.Threading.Tasks;
 
 // [...]
 
@@ -29,7 +30,8 @@ namespace PokeHack
 
         public Pokemon(int PokemonID, int level)
         {
-            FetchPokemon(PokemonID);
+            Fetch(PokemonID);
+
             Level = level;
             Name = Poke.Name;
 
@@ -61,11 +63,25 @@ namespace PokeHack
 
         }
 	
-        public async void FetchPokemon(int PokemonID)
+        public async void Fetch(int PokemonID)
         {
-            Poke = await DataFetcher.GetApiObject<PokeAPI.Pokemon>(PokemonID);
-            Species = await DataFetcher.GetApiObject<PokemonSpecies>(PokemonID);
+            Task<PokeAPI.Pokemon> PokeTask = FetchPokemon(PokemonID);
+            Poke = PokeTask.Result;
+
+            Task<PokemonSpecies> SpeciesTask = FetchSpecies(PokemonID);
+            Species = SpeciesTask.Result;
         }
+
+        public async Task<PokeAPI.Pokemon> FetchPokemon(int PokemonID)
+        {
+            return await DataFetcher.GetApiObject<PokeAPI.Pokemon>(PokemonID);
+        }
+
+        public async Task<PokemonSpecies> FetchSpecies(int PokemonID)
+        {
+            return await DataFetcher.GetApiObject<PokemonSpecies>(PokemonID);
+        }
+       
 
         public void TakeDamage(int damage) {
 			HealthCurr -= damage;
