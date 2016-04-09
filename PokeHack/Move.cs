@@ -21,6 +21,9 @@ namespace PokeHack
             Console.WriteLine("Loading Move " + Name);
             Fetch(Name);
 
+            MoveMetadata meta = (MoveMetadata) move.Meta;
+            meta.Ailment.Name;
+
             if (move.Accuracy != null)
                 Accuracy = (int)move.Accuracy;
             if (move.EffectChance != null)
