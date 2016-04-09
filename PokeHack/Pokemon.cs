@@ -30,11 +30,13 @@ namespace PokeHack
 
         public Pokemon(int PokemonID, int level)
         {
-            Console.WriteLine("Loading Pokemon " + PokemonID);
+            Console.Write("Loading Pokemon " + PokemonID);
             Fetch(PokemonID);
 
             Level = level;
             Name = Poke.Name;
+
+            Console.Write(" - " + Name + "\n");
 
             PokemonStats[] Stats = Poke.Stats;
 
