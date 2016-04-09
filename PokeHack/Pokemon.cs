@@ -30,6 +30,7 @@ namespace PokeHack
 
         public Pokemon(int PokemonID, int level)
         {
+            Console.WriteLine("Loading Pokemon " + PokemonID);
             Fetch(PokemonID);
 
             Level = level;
@@ -67,9 +68,6 @@ namespace PokeHack
         {
             Task<PokeAPI.Pokemon> PokeTask = FetchPokemon(PokemonID);
             Poke = PokeTask.Result;
-
-            Task<PokemonSpecies> SpeciesTask = FetchSpecies(PokemonID);
-            Species = SpeciesTask.Result;
         }
 
         public async Task<PokeAPI.Pokemon> FetchPokemon(int PokemonID)

@@ -1,5 +1,6 @@
 ﻿using System;
 using PokeAPI;
+using System.Threading.Tasks;
 
 namespace PokeHack
 {
@@ -14,23 +15,35 @@ namespace PokeHack
         public string DamageClass;
         public Type Type;
 
-        public Move(int id)
+        public Move(int MoveID)
         {
-            FetchMove(id);
-            System.Threading.Thread.Sleep(3000);
-            Accuracy = (int)move.Accuracy;
+            Console.WriteLine("Loading Move " + MoveID);
+            Fetch(MoveID);
+            Name = move.Name;
+            
+            if(move.Accuracy != null)
+                Accuracy = (int)move.Accuracy;
             if(move.EffectChance != null)
                 EffectChance = (int)move.EffectChance;
-            PowerPoints = (int)move.PP;
-            Power = (int)move.Power;
+            if(move.PP != null)
+                PowerPoints = (int)move.PP;
+            if (move.Power != null)
+                Power = (int)move.Power;
+
             DamageClass = move.DamageClass.Name;
             Type = StringToType(move.Type.Name);
 
         }
 
-        public async void FetchMove(int id)
+        public async void Fetch(int MoveID)
         {
-            move = await DataFetcher.GetApiObject<PokeAPI.Move>(id);
+            Task<PokeAPI.Move> MoveTask = FetchMove(MoveID);
+            move = MoveTask.Result;
+        }
+
+        public async Task<PokeAPI.Move> FetchMove(int MoveID)
+        {
+            return await DataFetcher.GetApiObject<PokeAPI.Move>(MoveID);
         }
 
         private Type StringToType(string typename)

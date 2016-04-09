@@ -31,14 +31,17 @@ namespace PokeHack
                 if(p1.HealthCurr > 0 && p2.HealthCurr > 0)
                 {
                     CombatRound(p1, p2);
-                    if(p1.HealthCurr < 0)
+                } else
+                {
+                    if (p1.HealthCurr < 0)
                         Console.WriteLine(p1.Name + " perished horribly");
                     if (p2.HealthCurr < 0)
                         Console.WriteLine(p2.Name + " perished horribly");
+                    break;
                 }
 
             }
-
+            Console.ReadLine();
         }
 
         public static void CombatRound(Pokemon p1, Pokemon p2)
