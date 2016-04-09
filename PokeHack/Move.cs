@@ -17,8 +17,10 @@ namespace PokeHack
         public Move(int id)
         {
             FetchMove(id);
+            System.Threading.Thread.Sleep(3000);
             Accuracy = (int)move.Accuracy;
-            EffectChance = (int)move.EffectChance;
+            if(move.EffectChance != null)
+                EffectChance = (int)move.EffectChance;
             PowerPoints = (int)move.PP;
             Power = (int)move.Power;
             DamageClass = move.DamageClass.Name;
@@ -33,7 +35,7 @@ namespace PokeHack
 
         private Type StringToType(string typename)
         {
-            int TypeNum;
+            
             switch (typename[0])
             {
                 case 'b':
