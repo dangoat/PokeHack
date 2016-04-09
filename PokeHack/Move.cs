@@ -14,41 +14,56 @@ namespace PokeHack
         public int Power;
         public string DamageClass;
         public Type Type;
+        public string EffectType;
 
-        public Move(PokemonMove ThisMove)
+        public Move(int MoveID)
         {
-            Name = ThisMove.Move.Name;
-            Console.WriteLine("Loading Move " + Name);
-            Fetch(Name);
-            
-            if(move.Accuracy != null)
+            Console.WriteLine("Loading Move " + MoveID);
+            Fetch(MoveID);
+            Name = move.Name;
+            // PokeAPI.MoveAilment meta = move.Meta.Value.Ailment;
+
+            if (move.Accuracy != null)
                 Accuracy = (int)move.Accuracy;
-            if(move.EffectChance != null)
+            else Accuracy = 100;
+            if (move.EffectChance != null)
                 EffectChance = (int)move.EffectChance;
-            if(move.PP != null)
+            if (move.PP != null)
                 PowerPoints = (int)move.PP;
             if (move.Power != null)
                 Power = (int)move.Power;
+
 
             DamageClass = move.DamageClass.Name;
             Type = StringToType(move.Type.Name);
 
         }
 
-        public async void Fetch(String MoveName)
+        public async void Fetch(int MoveID)
         {
-            Task<PokeAPI.Move> MoveTask = FetchMove(MoveName);
+            Task<PokeAPI.Move> MoveTask = FetchMove(MoveID);
             move = MoveTask.Result;
         }
 
-        public async Task<PokeAPI.Move> FetchMove(String MoveName)
+        public async Task<PokeAPI.Move> FetchMove(int MoveID)
         {
-            return await DataFetcher.GetNamedApiObject<PokeAPI.Move>(MoveName);
+            return await DataFetcher.GetApiObject<PokeAPI.Move>(MoveID);
+        }
+
+        public string GetStatus()
+        {
+            Random random = new Random();
+            int EffectHappens = random.Next(0, 100);
+            if (EffectHappens > this.EffectChance)
+            {
+                return null;
+            }
+            return this.EffectType;
         }
 
         private Type StringToType(string typename)
         {
-            
+
             switch (typename[0])
             {
                 case 'b':
@@ -105,6 +120,6 @@ namespace PokeHack
                     return Type.Water;
             }
         }
+
     }
 }
-
