@@ -8,8 +8,8 @@ namespace PokeHack
     {
         private PokeAPI.Move move;
         public string Name;
-        public int Accuracy;
-        public int EffectChance;
+        public int Accuracy = 100;
+        public int EffectChance = 0;
         public int PowerPoints;
         public int Power;
         public string DamageClass;
@@ -49,14 +49,19 @@ namespace PokeHack
         {
             return await DataFetcher.GetNamedApiObject<PokeAPI.Move>(MoveName);
         }
+
+        public bool HasStatus()
+        {
+            return EffectType != null;
+        }
+
         public string GetStatus()
         {
             Random random = new Random();
             int EffectHappens = random.Next(0, 100);
             if (EffectHappens > this.EffectChance)
-            {
-                return null;
-            }
+                return "";
+
             return this.EffectType;
         }
 
