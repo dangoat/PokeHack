@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PokeApi.NET">
-      <HintPath>..\..\..\..\Desktop\New folder\PokeApi.NET-v2-16ced95c46f4a95683e116129dd41304b7592e82\PokeApi.NET\bin\Debug\PokeApi.NET.dll</HintPath>
+      <HintPath>..\..\..\..\..\PokeAPI\PokeApi.NET\bin\Debug\PokeApi.NET.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
