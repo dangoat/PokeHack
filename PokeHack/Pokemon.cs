@@ -17,8 +17,8 @@ namespace PokeHack
 		public int HealthCurr;
 		public int Attack;
 		public int Defense;
-		private int SpecialAttack;
-		private int SpecialDefense;
+		public int SpecialAttack;
+		public int SpecialDefense;
         public int Speed;
 		public int Accuracy = 100;
 		public int Evasiveness = 100;
@@ -118,10 +118,10 @@ namespace PokeHack
             double damage = 0;
             if (String.Compare(move.DamageClass, "physical") == 0)
             {
-                damage = (double)(2 * this.Level + 10) / 250 * ((double)(this.Attack) / defender.Defense + 2) * move.Power * GetModifier(move.Type, defender.Type1, defender.Type2);
+                damage = (double)(2 * this.Level + 10) / 250.0 * (double)(this.Attack) / defender.Defense * move.Power * GetModifier(move.Type, defender.Type1, defender.Type2);
             }
             else if (String.Compare(move.DamageClass, "special") == 0)
-                damage = (double)(2 * this.Level + 10) / 250 * ((double)(this.SpecialAttack) / defender.SpecialDefense + 2) * move.Power * GetModifier(move.Type, defender.Type1, defender.Type2);
+                damage = (double)(2 * this.Level + 10) / 250.0 * (double)(this.SpecialAttack) / defender.SpecialDefense * move.Power * GetModifier(move.Type, defender.Type1, defender.Type2);
             if (move.Type == this.Type1 || move.Type == this.Type2)
                 damage *= 1.5;
             return (int)damage;
