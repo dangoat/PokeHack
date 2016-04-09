@@ -20,11 +20,11 @@ namespace PokeHack
 
             Console.WriteLine(p1.Name);
             foreach (Move m in p1.MoveSet)
-                Console.WriteLine(m.Name);
+                Console.WriteLine("\t-" + m.Name);
 
             Console.WriteLine(p2.Name);
             foreach (Move m in p2.MoveSet)
-                Console.WriteLine(m.Name);
+                //Console.WriteLine("\t-" + m.Name);
 
             while (true)
             {
