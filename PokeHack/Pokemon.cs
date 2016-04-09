@@ -3,7 +3,6 @@ using PokeAPI;
 
 // [...]
 
-
 namespace PokeHack
 {
 	public class Pokemon	//Put everything in here
