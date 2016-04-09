@@ -114,10 +114,10 @@ namespace PokeHack
             double damage = 0;
             if (String.Compare(move.DamageClass, "physical") == 0)
             {
-                damage = (double)(2 * this.Level + 10) / 250 * ((double)(this.Attack / defender.Defense) + 2) * move.Power * GetModifier(move.Type, defender.Type1, defender.Type2);
+                damage = (double)(2 * this.Level + 10) / 250 * ((double)(this.Attack) / defender.Defense + 2) * move.Power * GetModifier(move.Type, defender.Type1, defender.Type2);
             }
             else if (String.Compare(move.DamageClass, "special") == 0)
-                damage = (double)((2 * this.Level + 10) / 250) * ((double)(this.SpecialAttack / defender.SpecialDefense) + 2) * move.Power * GetModifier(move.Type, defender.Type1, defender.Type2);
+                damage = (double)(2 * this.Level + 10) / 250 * ((double)(this.SpecialAttack) / defender.SpecialDefense + 2) * move.Power * GetModifier(move.Type, defender.Type1, defender.Type2);
             if (move.Type == this.Type1 || move.Type == this.Type2)
                 damage *= 1.5;
             return (int)damage;
