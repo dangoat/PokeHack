@@ -15,11 +15,11 @@ namespace PokeHack
         public string DamageClass;
         public Type Type;
 
-        public Move(int MoveID)
+        public Move(PokemonMove ThisMove)
         {
-            Console.WriteLine("Loading Move " + MoveID);
-            Fetch(MoveID);
-            Name = move.Name;
+            Name = ThisMove.Move.Name;
+            Console.WriteLine("Loading Move " + Name);
+            Fetch(Name);
             
             if(move.Accuracy != null)
                 Accuracy = (int)move.Accuracy;
@@ -35,15 +35,15 @@ namespace PokeHack
 
         }
 
-        public async void Fetch(int MoveID)
+        public async void Fetch(String MoveName)
         {
-            Task<PokeAPI.Move> MoveTask = FetchMove(MoveID);
+            Task<PokeAPI.Move> MoveTask = FetchMove(MoveName);
             move = MoveTask.Result;
         }
 
-        public async Task<PokeAPI.Move> FetchMove(int MoveID)
+        public async Task<PokeAPI.Move> FetchMove(String MoveName)
         {
-            return await DataFetcher.GetApiObject<PokeAPI.Move>(MoveID);
+            return await DataFetcher.GetNamedApiObject<PokeAPI.Move>(MoveName);
         }
 
         private Type StringToType(string typename)
