@@ -14,10 +14,11 @@ namespace PokeHack
 
         public static void Main()
         {
-
-            Pokemon p1 = new Pokemon(10, 10);
-            Pokemon p2 = new Pokemon(2, 1);
-
+            Random rand = new Random();
+            
+            Pokemon p1 = new Pokemon(rand.Next(1, 721), 50);
+            Pokemon p2 = new Pokemon(rand.Next(1, 721), 50);
+            
             Console.WriteLine(p1.Name);
             foreach (Move m in p1.MoveSet)
                 Console.WriteLine(m.Name);
@@ -25,20 +26,26 @@ namespace PokeHack
             Console.WriteLine(p2.Name);
             foreach (Move m in p2.MoveSet)
                 Console.WriteLine(m.Name);
-
+            Console.ReadLine();
             while (true)
             {
                 if(p1.HealthCurr > 0 && p2.HealthCurr > 0)
                 {
                     CombatRound(p1, p2);
-                } else
+                }
+                if (p1.HealthCurr < 0)
                 {
-                    if (p1.HealthCurr < 0)
-                        Console.WriteLine(p1.Name + " perished horribly");
-                    if (p2.HealthCurr < 0)
-                        Console.WriteLine(p2.Name + " perished horribly");
+                    Console.WriteLine(p1.Name + " perished horribly");
                     break;
                 }
+                if (p2.HealthCurr < 0)
+                {
+                    Console.WriteLine(p2.Name + " perished horribly");
+                    break;
+                }
+                  
+                    
+                
 
             }
             Console.ReadLine();
