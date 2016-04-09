@@ -31,21 +31,23 @@ namespace PokeHack
             FetchPokemon(PokemonID);
             Level = level;
 
-            
-            HealthMax = p.;
+            PokemonStats[] Stats = Poke.Stats;
+
+            HealthMax = (Stats[0].BaseValue * 2 * Level / 100) + 10 + Level;
             HealthCurr = HealthMax;
 
-            Attack = p.Attack;
-            Defense = p.Defense;
-            SpecialAttack = p.SpAtk;
-            SpecialDefense = p.SpDef;
-            Speed = p.Speed;
-            Happiness = p.Happiness;
-            Weight = p.Weight;
-            Type1 = p.Types[1]["name"];
-            if (Types.length > 1)
+            Attack = (Stats[1].BaseValue * 2 * Level / 100) + 5;
+            Defense = (Stats[2].BaseValue * 2 * Level / 100) + 5;
+            SpecialAttack = (Stats[3].BaseValue * 2 * Level / 100) + 5;
+            SpecialDefense = (Stats[4].BaseValue * 2 * Level / 100) + 5;            Speed = p.Speed;
+            // Happiness = p.Happiness;
+            // Weight = p.Weight;
+
+            PokemonTypeMap[] Types = Poke.Types;
+            Type1 = Types[0].Type.Name;
+            if (Types.Length > 1)
             {
-                Type2 = p.Types[2]["name"];
+                Type2 = Types[1].Type.Name;
             }
             //Type = p.Types[Name];
 
@@ -57,11 +59,11 @@ namespace PokeHack
             Species = await DataFetcher.GetApiObject<PokemonSpecies>(PokemonID);
         }
 
-        public int TakeDamage(int damage) {
+        public void TakeDamage(int damage) {
 			HealthCurr -= damage;
 		}
-		public int UseMove(Move move, Pokemon defender) {
-			int damage = (int)((((float)(2 * this.Level + 10)/250 * (this.attack /	defender.defense) + 2) * GetModifier(move.Type, defender.Type1, defender.Type2)));
+		public void UseMove(Move move, Pokemon defender) {
+			int damage = (int)((((float)(2 * this.Level + 10)/250 * (this.Attack /	defender.Defense) + 2) * GetModifier(move.Type, defender.Type1, defender.Type2)));
 			int Hit = move.Accuracy * this.Accuracy / defender.Evasiveness;
 			1 + Random % 100;
 		}
