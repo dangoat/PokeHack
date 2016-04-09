@@ -10,26 +10,28 @@ namespace PokeHack
 	{
 		private PokeAPI.Pokemon Poke;
         private PokeAPI.PokemonSpecies Species;
-		private Move[] MoveSet = new Move[4];
+        public Move[] MoveSet = new Move[4];
+        public String Name = "missing";
 		private int Level;
 		private int HealthMax;
-		private int HealthCurr;
+		public int HealthCurr;
 		private int Attack;
 		private int Defense;
 		private int SpecialAttack;
 		private int SpecialDefense;
-		private int Speed;
-		private int Accuracy = 100;
-		private int Evasiveness = 100;
+        public int Speed;
+		public int Accuracy = 100;
+		public int Evasiveness = 100;
 		private int Happiness;
 		private int Weight;
-		private string Type1;
-		private string Type2 = null;
+		private Type Type1;
+        private Type Type2 = Type.None;
 
         public Pokemon(int PokemonID, int level)
         {
             FetchPokemon(PokemonID);
             Level = level;
+            Name = Poke.Name;
 
             PokemonStats[] Stats = Poke.Stats;
 
@@ -45,18 +47,18 @@ namespace PokeHack
             // Weight = p.Weight;
 
             PokemonTypeMap[] Types = Poke.Types;
-            Type1 = Types[0].Type.Name;
+            Type1 = StringToType(Types[0].Type.Name);
             if (Types.Length > 1)
             {
-                Type2 = Types[1].Type.Name;
+                Type2 = StringToType(Types[1].Type.Name);
             }
-            //Type = p.Types[Name];
 
-        }
-        
-       	public Move[] GetMoves()
-        {
-            return this.MoveSet;
+            //Randomly selects moves
+            Random rand = new Random();
+            for(int i = 0; i < 4; i++)
+                MoveSet[i] = new Move(rand.Next(1, 621));
+            
+
         }
 	
         public async void FetchPokemon(int PokemonID)
@@ -68,10 +70,13 @@ namespace PokeHack
         public void TakeDamage(int damage) {
 			HealthCurr -= damage;
 		}
-		public void UseMove(Move move, Pokemon defender) {
-			int damage = (int)((((float)(2 * this.Level + 10)/250 * (this.Attack /	defender.Defense) + 2) * GetModifier(move.Type, defender.Type1, defender.Type2)));
-			int Hit = move.Accuracy * this.Accuracy / defender.Evasiveness;
-			1 + Random % 100;
+		public int MoveDamage(Move move, Pokemon defender) {
+            int damage;
+            if (String.Compare(move.DamageClass, "physical") == 0) 
+                damage = (int)((((float)(2 * this.Level + 10)/250 * (this.Attack /	defender.Defense) + 2) * GetModifier(move.Type, defender.Type1, defender.Type2)));
+            else
+                damage = (int)((((float)(2 * this.Level + 10) / 250 * (this.SpecialAttack / defender.SpecialDefense) + 2) * GetModifier(move.Type, defender.Type1, defender.Type2)));
+            return damage;
 		}
 		
 		public static double GetModifier(Type attack, Type t1, Type t2)
@@ -105,5 +110,64 @@ namespace PokeHack
 	
 	            return modifier;
 	        }
-	}
+
+        private Type StringToType(string typename)
+        {
+            switch (typename[0])
+            {
+                case 'b':
+                    return Type.Bug;
+                case 'd':
+                    switch (typename[1])
+                    {
+                        case 'a':
+                            return Type.Dark;
+                        default:
+                            return Type.Dragon;
+                    }
+                case 'e':
+                    return Type.Electric;
+                case 'f':
+                    switch (typename[2])
+                    {
+                        case 'i':
+                            return Type.Fairy;
+                        case 'g':
+                            return Type.Fighting;
+                        case 'r':
+                            return Type.Fire;
+                        default:
+                            return Type.Flying;
+                    }
+                case 'g':
+                    switch (typename[4])
+                    {
+                        case 't':
+                            return Type.Ghost;
+                        case 's':
+                            return Type.Grass;
+                        default:
+                            return Type.Ground;
+                    }
+                case 'i':
+                    return Type.Ice;
+                case 'n':
+                    return Type.Normal;
+                case 'p':
+                    switch (typename[1])
+                    {
+                        case 'o':
+                            return Type.Poison;
+                        default:
+                            return Type.Psychic;
+                    }
+                case 'r':
+                    return Type.Rock;
+                case 's':
+                    return Type.Steel;
+                default:
+                    return Type.Water;
+            }
+        }
+    }
 }

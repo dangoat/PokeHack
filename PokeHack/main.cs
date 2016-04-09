@@ -14,47 +14,95 @@ namespace PokeHack
 
         public static void Main()
         {
-            string command;
 
-            Pokemon p1 = new Pokemon(number, level);
+            Pokemon p1 = new Pokemon(10, 10);
+            Pokemon p2 = new Pokemon(2, 1);
 
+            Console.WriteLine(p1.Name);
+            foreach (Move m in p1.MoveSet)
+                Console.WriteLine(m.Name);
+
+            Console.WriteLine(p2.Name);
+            foreach (Move m in p2.MoveSet)
+                Console.WriteLine(m.Name);
 
             while (true)
             {
-                command = Console.ReadLine();
-
-                Console.WriteLine(command);
+                if(p1.HealthCurr > 0 && p2.HealthCurr > 0)
+                {
+                    CombatRound(p1, p2);
+                    if(p1.HealthCurr < 0)
+                        Console.WriteLine(p1.Name + " perished horribly");
+                    if (p2.HealthCurr < 0)
+                        Console.WriteLine(p2.Name + " perished horribly");
+                }
 
             }
 
         }
 
-        public void CombatRound(Pokemon p1, Pokemon p2)
+        public static void CombatRound(Pokemon p1, Pokemon p2)
         {
-            Move p1m, p2m;
-            int maxpower = 0;
+            Move p1m = null, p2m = null;
+            Random rand = new Random();
 
-            for (Move m: p1.GetMoves())
+            p1m = PickMoveHighestPower(p1, p2);
+            p2m = PickMoveHighestPower(p2, p1);
+            if (p1.Speed > p2.Speed)
             {
-                if (p1.UseMove(m, p2) > maxpower)
+                if (rand.Next(1, 100) < HitChance(p1m, p1, p2)) //Check for miss
+                {
+                    p2.TakeDamage(p1.MoveDamage(p1m, p2));
+                    Console.WriteLine(p1.Name + " used " + p1m.Name);
+                }
+                else Console.WriteLine(p1.Name + " missed");
+                if (p2.HealthCurr > 0) //Check for kill
+                { 
+                    if (rand.Next(1, 100) < HitChance(p2m, p2, p1))
+                    {
+                        p1.TakeDamage(p2.MoveDamage(p2m, p1));
+                        Console.WriteLine(p2.Name + " used " + p2m.Name);
+                    }
+                    else Console.WriteLine(p2.Name + " missed");
+                }
+            }
+            else
+            {
+                if (rand.Next(1, 100) < HitChance(p2m, p2, p1))
+                {
+                    p1.TakeDamage(p2.MoveDamage(p2m, p1));
+                    Console.WriteLine(p2.Name + " used " + p2m.Name);
+                }
+                else Console.WriteLine(p2.Name + " missed");
+                if (p1.HealthCurr > 0)
+                {
+                    if (rand.Next(1, 100) < HitChance(p1m, p1, p2))
+                    {
+                        p2.TakeDamage(p1.MoveDamage(p1m, p2));
+                        Console.WriteLine(p1.Name + " used " + p1m.Name);
+                    }
+                    else Console.WriteLine(p1.Name + " missed");
+                }
+            }
+        }
+        //Picks move based on highest damage possible.
+        //p1 is attacker, p2 is defender
+        private static Move PickMoveHighestPower(Pokemon p1, Pokemon p2)
+        {
+            int maxpower = 0;
+            Move p1m = null;
+            foreach (Move m in p1.MoveSet)
+                if (p1.MoveDamage(m, p2) > maxpower)
                 {
                     p1m = m;
-                    maxpower = p1.UseMove(m, p2);
+                    maxpower = p1.MoveDamage(m, p2);
                 }
-            }
+            return p1m;
+        }
 
-            maxpower = 0;
-
-            for (Move m: p2.GetMoves())
-            {
-                if (p2.UseMove(m, p1) > maxpower)
-                {
-                    p2m = m;
-                    maxpower = p2.UseMove(m, p1);
-                }
-            }
-
-
+        private  static int HitChance(Move m, Pokemon att, Pokemon def)
+        {
+            return m.Accuracy * att.Accuracy / def.Evasiveness;
         }
 
     }
