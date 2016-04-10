@@ -177,7 +177,8 @@ namespace PokeHack
                     Console.WriteLine(Name + " wasn't affected by infatuation");
                     return true;
                 }
-                if (String.Compare(Ailment, "sleep") == 0)
+            }
+            if (String.Compare(Ailment, "sleep") == 0)
             {
                 if(AilmentTime > 0)
                 {

@@ -9,7 +9,7 @@ namespace PokeHack
         private PokeAPI.Move move;
         public string Name;
         public int Accuracy = 100;
-        public int EffectChance = 0;
+        public int EffectChance = 100;
         public int PowerPoints;
         public int Power;
         public string DamageClass;
@@ -57,7 +57,7 @@ namespace PokeHack
             if (EffectType.CompareTo("none") == 0)
                 EffectType = "";
             DamageClass = move.DamageClass.Name;
-            Type = StringToType(move.Type.Name);
+            Type = Types.StringToType(move.Type.Name);
 
         }
 

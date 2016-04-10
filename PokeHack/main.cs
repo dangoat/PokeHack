@@ -24,11 +24,6 @@ namespace PokeHack
             {
                 p1 = new Pokemon(25, 100);
                 p2 = new Pokemon(69, 100);
-                Move m1 = new Move("scratch");
-                Move m11 = new Move("pound");
-                Move m2 = new Move("supersonic");
-                Move m3 = new Move("hypnosis");
-                Move m4 = new Move("thunder-wave");
 
                 System.Threading.Thread.Sleep(2000);
 
