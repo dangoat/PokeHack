@@ -246,7 +246,11 @@ namespace PokeHack
         // Give this pokemon an ailment
         public void GiveAilment(string Ailment, int time)
         {
-            if (String.Compare(Ailment, "") != 0 && String.Compare(this.Ailment, "") != 0)
+            if (String.Compare(Ailment, "") == 0)
+            {
+                return;
+            }
+            else if (String.Compare(this.Ailment, "") != 0)
             {
                 Console.WriteLine("But it's already affected by " + Ailment);
                 return;
