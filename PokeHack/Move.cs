@@ -117,5 +117,24 @@ namespace PokeHack
             return this.EffectType;
         }
 
+        public void EffectStats(Pokemon attacker, Pokemon defender)
+        {
+            MoveStatChange[] StatChanges = move.StatChanges;
+            Random rand = new Random();
+            if (rand.Next(0, 99) < move.Meta.Value.StatChance || move.Meta.Value.StatChance == 0)
+            {
+                foreach (MoveStatChange StatChange in StatChanges)
+                {
+                    if (String.Compare(move.Target.Name, "user") == 0 ||
+                        String.Compare(move.Target.Name, "user-or-ally") == 0 ||
+                        String.Compare(move.Target.Name, "users-field") == 0 ||
+                        String.Compare(move.Target.Name, "user-and-allies") == 0)
+                        attacker.ModifyStat(StatChange.Change, StatChange.Stat.Name);
+                    else
+                        defender.ModifyStat(StatChange.Change, StatChange.Stat.Name);
+                }
+            }
+        }
+
     }
 }
