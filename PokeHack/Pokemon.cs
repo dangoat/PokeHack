@@ -22,13 +22,13 @@ namespace PokeHack
         public int Speed;
 		public int Accuracy = 100;
 		public int Evasiveness = 100;
-		private int Happiness;
-		private int Weight;
 		private Type Type1;
         private Type Type2 = Type.None;
         public String Ailment = "";
         public int AilmentTime = -1;
+        public Random rand;
 
+        // Cunstructor by name
         public Pokemon(string PokemonName, int level)
         {
             // Fetch the Pokemon by name
@@ -41,8 +41,11 @@ namespace PokeHack
 
             GenerateStats();
             GenerateMoves();
+
+            rand = new Random();
         }
 
+        // Cunstructor by ID
         public Pokemon(int PokemonID, int level)
         {
 
@@ -58,6 +61,8 @@ namespace PokeHack
 
             GenerateStats();
             GenerateMoves();
+
+            rand = new Random();
         }
 
         private void GenerateStats()
@@ -73,15 +78,12 @@ namespace PokeHack
             SpecialDefense = (Stats[1].BaseValue * 2 * Level / 100) + 5;
             Speed = (Stats[0].BaseValue * 2 * Level / 100) + 5;
 
-            // Happiness = p.Happiness;
-            // Weight = p.Weight;
-
             // Set Types
-            PokemonTypeMap[] Types = Poke.Types;
-            Type1 = StringToType(Types[0].Type.Name);
-            if (Types.Length > 1)
+            PokemonTypeMap[] TypeMap = Poke.Types;
+            Type1 = Types.StringToType(TypeMap[0].Type.Name);
+            if (TypeMap.Length > 1)
             {
-                Type2 = StringToType(Types[1].Type.Name);
+                Type2 = Types.StringToType(TypeMap[1].Type.Name);
             }
         }
 
@@ -92,7 +94,7 @@ namespace PokeHack
 
             if (PossibleMoves.Length > 4)
             {
-                Random rand = new Random();
+                Random randy = new Random();
                 int[] UsedMoves = new int[4];
                 for (int i = 0; i < 4; i++)
                 {
@@ -101,7 +103,7 @@ namespace PokeHack
                     do
                     {
                         alreadyHas = false;
-                        randNum = rand.Next(1, PossibleMoves.Length);
+                        randNum = randy.Next(1, PossibleMoves.Length);
                         foreach (int used in UsedMoves)
                             if (used == randNum)
                                 alreadyHas = true;
@@ -116,6 +118,7 @@ namespace PokeHack
                     MoveSet[i] = new Move(PossibleMoves[i]);
         }
 	
+        // Fetch by ID
         public void Fetch(int PokemonID)
         {
             if (PokemonID == 132)
@@ -124,34 +127,39 @@ namespace PokeHack
             Poke = PokeTask.Result;
         }
 
+        // Fetch by name
         public void Fetch (string PokemonName)
         {
             Task<PokeAPI.Pokemon> PokeTask = FetchPokemonByName(PokemonName);
             Poke = PokeTask.Result;
         }
 
+        // Fetch Task by ID
         public async Task<PokeAPI.Pokemon> FetchPokemon(int PokemonID)
         {
             return await DataFetcher.GetApiObject<PokeAPI.Pokemon>(PokemonID);
         }
 
+        // Fetch Task by name
         public async Task<PokeAPI.Pokemon> FetchPokemonByName(string PokemonName)
         {
             return await DataFetcher.GetNamedApiObject<PokeAPI.Pokemon>(PokemonName);
         }
-       
 
+        // Inflict damage
         public void TakeDamage(int damage) {
 			HealthCurr -= damage;
 		}
+
+        // Is the capable of attacking
         public bool CanAttack()
         {
-            Random rand = new Random();
+            int nummy = rand.Next(1, 100);
             if (Ailment == "")
                 return true;
             if (String.Compare(Ailment, "paralysis") == 0)
             {
-                if (rand.Next(1, 4) == 1)
+                if (nummy % 4 == 1)
                 {
                     Console.WriteLine(Name + " cannot operate due to paralysis");
                     return false;
@@ -159,6 +167,19 @@ namespace PokeHack
                 else
                 {
                     Console.WriteLine(Name + " wasn't affected by paralysis");
+                    return true;
+                }
+            }
+            if (String.Compare(Ailment, "infatuation") == 0)
+            {
+                if (nummy % 2 == 1)
+                {
+                    Console.WriteLine(Name + " cannot operate due to infatuation");
+                    return false;
+                }
+                else
+                {
+                    Console.WriteLine(Name + " wasn't affected by infatuation");
                     return true;
                 }
             }
@@ -180,7 +201,7 @@ namespace PokeHack
             }
             if (String.Compare(Ailment, "freeze") == 0)
             {
-                if (rand.Next(1, 5) == 1)
+                if (nummy % 5 == 1)
                 {
                     Ailment = "";
                     AilmentTime = -1;
@@ -206,6 +227,7 @@ namespace PokeHack
                     Console.WriteLine(Name + " has shed their confusion");
                     return true;
                 }
+
                 if (rand.Next(1, 2) == 1)
                 {
                     this.TakeDamage((int)((double)(2 * this.Level + 10) / 250.0 * (double)(this.Attack) / this.Defense * 40));
@@ -226,172 +248,48 @@ namespace PokeHack
 
             return true;
         }
+
+        // Give this pokemon an ailment
         public void GiveAilment(string Ailment, int time)
         {
+            if (String.Compare(Ailment, "") == 0)
+            {
+                return;
+            }
+            else if (String.Compare(this.Ailment, "") != 0)
+            {
+                Console.WriteLine("But it's already affected by " + Ailment);
+                return;
+            }
             this.Ailment = Ailment;
             this.AilmentTime = time;
+            if (String.Compare(Ailment, "") != 0)
+                Console.WriteLine(Name + " now has the Ailment " + Ailment);
+            
         }
 
+        // Take either heal or recoil
         public void TakeHealRecoil(int healRecoil)
         {
             HealthCurr += healRecoil;
         }
 
-		public int MoveDamage(Move move, Pokemon defender) {
+        // Determine the damage dealt by a move
+		public int MoveDamage(Move move, Pokemon defender)
+        {
             double damage = 0;
             if (String.Compare(move.DamageClass, "physical") == 0)
             {
-                damage = (double)(2 * this.Level + 10) / 250.0 * (double)(this.Attack) / defender.Defense * move.Power * GetModifier(move.Type, defender.Type1, defender.Type2);
+                damage = (double)(2 * this.Level + 10) / 250.0 * (double)(this.Attack) / defender.Defense * move.Power * Types.GetModifier(move.Type, defender.Type1, defender.Type2);
             }
             else if (String.Compare(move.DamageClass, "special") == 0)
-                damage = (double)(2 * this.Level + 10) / 250.0 * (double)(this.SpecialAttack) / defender.SpecialDefense * move.Power * GetModifier(move.Type, defender.Type1, defender.Type2);
+                damage = (double)(2 * this.Level + 10) / 250.0 * (double)(this.SpecialAttack) / defender.SpecialDefense * move.Power * Types.GetModifier(move.Type, defender.Type1, defender.Type2);
             if (move.Type == this.Type1 || move.Type == this.Type2)
                 damage *= 1.5;
 
 
             return (int)damage;
 		}
-		
-		public static double GetModifier(Type attack, Type t1, Type t2)
-	        {
-	            double modifier = 1;
-	            //Attack is row, Defense is column
-	            double[,] resistances = new double[,] {
-	            {  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, .5,  0,  1,  1, .5,  1},
-	            {  1, .5, .5,  1,  2,  2,  1,  1,  1,  1,  1,  2, .5,  1, .5,  1,  2,  1},
-	            {  1,  2, .5,  1, .5,  1,  1,  1,  2,  1,  1,  1,  2,  1, .5,  1,  1,  1},
-	            {  1,  1,  2, .5, .5,  1,  1,  1,  0,  2,  1,  1,  1,  1, .5,  1,  1,  1},
-	            {  1, .5,  2,  1, .5,  1,  1, .5,  2, .5,  1, .5,  2,  1, .5,  1, .5,  1},
-	            {  1, .5, .5,  1,  2, .5,  1,  1,  2,  2,  1,  1,  1,  1,  2,  1, .5,  1},
-	            {  2,  1,  1,  1,  1,  2,  1, .5,  1, .5, .5, .5,  2,  0,  1,  2,  2, .5},
-	            {  1,  1,  1,  1,  2,  1,  1, .5, .5,  1,  1,  1, .5, .5,  1,  1,  0,  2},
-	            {  1,  2,  1,  2, .5,  1,  1,  2,  1,  0,  1, .5,  2,  1,  1,  1,  2,  1},
-	            {  1,  1,  1, .5,  2,  1,  2,  1,  1,  1,  1,  2, .5,  1,  1,  1, .5,  1},
-	            {  1,  1,  1,  1,  1,  1,  2,  2,  1,  1, .5,  1,  1,  1,  1,  0, .5,  1},
-	            {  1, .5,  1,  1,  2,  1, .5, .5,  1, .5,  2,  1,  1, .5,  1,  2, .5, .5},
-	            {  1,  2,  1,  1,  1,  2, .5,  1, .5,  2,  1,  2,  1,  1,  1,  1, .5,  1},
-	            {  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  1,  1,  2,  1, .5,  1,  1},
-	            {  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  1, .5,  0},
-	            {  1,  1,  1,  1,  1,  1, .5,  1,  1,  1,  2,  1,  1,  2,  1, .5,  1,  1},
-	            {  1, .5, .5, .5,  1,  2,  1,  1,  1,  1,  1,  1,  2,  1,  1,  1, .5,  1},
-	            {  1, .5,  1,  1,  1,  1,  2, .5,  1,  1,  1,  1,  1,  1,  2,  2, .5,  1}};
-	
-	            modifier *= resistances[(int)attack, (int)t1];
-	
-	            if (t2 != Type.None)
-	                modifier *= resistances[(int)attack, (int)t2];
-	
-	            return modifier;
-	        }
-        public void ModifyStat(int modifier, string statName)
-        {
-            if(String.Compare(statName, "accuracy") == 0)
-            {
-                if (modifier < 0)
-                    this.Accuracy = (int)(this.Accuracy * 3.0 / (3.0 - modifier));
-                else if (modifier > 0)
-                    this.Accuracy = (int)(this.Accuracy * (3.0 + modifier) / 3.0);
-            }
-            if (String.Compare(statName, "evasion") == 0)
-            {
-                if (modifier < 0)
-                    this.Evasiveness = (int)(this.Evasiveness * 3.0 / (3.0 - modifier));
-                else if(modifier > 0)
-                    this.Evasiveness = (int)(this.Evasiveness * (3.0 + modifier) / 3.0);
-            }
-            if (String.Compare(statName, "attack") == 0)
-            {
-                if (modifier < 0)
-                    this.Attack = (int)(this.Attack * 2.0 / (2.0 - modifier));
-                else if (modifier > 0)
-                    this.Attack = (int)(this.Attack * (2.0 + modifier) / 2.0);
-            }
-            if (String.Compare(statName, "defense") == 0)
-            {
-                if (modifier < 0)
-                    this.Defense = (int)(this.Defense * 2.0 / (2.0 - modifier));
-                else if(modifier > 0)
-                    this.Defense = (int)(this.Defense * (2.0 + modifier) / 2.0);
-            }
-            if (String.Compare(statName, "special-attack") == 0)
-            {
-                if (modifier < 0)
-                    this.SpecialAttack = (int)(this.SpecialAttack * 2.0 / (2.0 - modifier));
-                else if(modifier > 0)
-                    this.SpecialAttack = (int)(this.SpecialAttack * (2.0 + modifier) / 2.0);
-            }
-            if (String.Compare(statName, "special-defense") == 0)
-            {
-                if (modifier < 0)
-                    this.SpecialDefense = (int)(this.SpecialDefense * 2.0 / (2.0 - modifier));
-                else if(modifier > 0)
-                    this.SpecialDefense = (int)(this.SpecialDefense * (2.0 + modifier) / 2.0);
-            }
-            if (String.Compare(statName, "speed") == 0)
-            {
-                if (modifier < 0)
-                    this.Speed = (int)(this.Speed * 2.0 / (2.0 - modifier));
-                else if(modifier > 0)
-                    this.Speed = (int)(this.Speed * (2.0 + modifier) / 2.0);
-            }
-        }
-        private Type StringToType(string typename)
-        {
-            switch (typename[0])
-            {
-                case 'b':
-                    return Type.Bug;
-                case 'd':
-                    switch (typename[1])
-                    {
-                        case 'a':
-                            return Type.Dark;
-                        default:
-                            return Type.Dragon;
-                    }
-                case 'e':
-                    return Type.Electric;
-                case 'f':
-                    switch (typename[2])
-                    {
-                        case 'i':
-                            return Type.Fairy;
-                        case 'g':
-                            return Type.Fighting;
-                        case 'r':
-                            return Type.Fire;
-                        default:
-                            return Type.Flying;
-                    }
-                case 'g':
-                    switch (typename[4])
-                    {
-                        case 't':
-                            return Type.Ghost;
-                        case 's':
-                            return Type.Grass;
-                        default:
-                            return Type.Ground;
-                    }
-                case 'i':
-                    return Type.Ice;
-                case 'n':
-                    return Type.Normal;
-                case 'p':
-                    switch (typename[1])
-                    {
-                        case 'o':
-                            return Type.Poison;
-                        default:
-                            return Type.Psychic;
-                    }
-                case 'r':
-                    return Type.Rock;
-                case 's':
-                    return Type.Steel;
-                default:
-                    return Type.Water;
-            }
-        }
+
     }
 }

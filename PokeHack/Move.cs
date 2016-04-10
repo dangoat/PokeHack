@@ -9,12 +9,34 @@ namespace PokeHack
         private PokeAPI.Move move;
         public string Name;
         public int Accuracy = 100;
-        public int EffectChance = 0;
+        public int EffectChance = 100;
         public int PowerPoints;
         public int Power;
         public string DamageClass;
         public Type Type;
         public string EffectType;
+
+        public Move(int MoveID)
+        {
+            Fetch(MoveID);
+            Name = move.Name;
+            Console.WriteLine(Name);
+
+            if (move.Accuracy != null)
+                Accuracy = (int)move.Accuracy;
+            if (move.EffectChance != null)
+                EffectChance = (int)move.EffectChance;
+            if (move.PP != null)
+                PowerPoints = (int)move.PP;
+            if (move.Power != null)
+                Power = (int)move.Power;
+
+            EffectType = move.Meta.Value.Ailment.Name;
+            if (EffectType.CompareTo("none") == 0)
+                EffectType = "";
+            DamageClass = move.DamageClass.Name;
+            Type = Types.StringToType(move.Type.Name);
+        }
 
         public Move(PokemonMove ThisMove)
         {
@@ -35,19 +57,30 @@ namespace PokeHack
             if (EffectType.CompareTo("none") == 0)
                 EffectType = "";
             DamageClass = move.DamageClass.Name;
-            Type = StringToType(move.Type.Name);
+            Type = Types.StringToType(move.Type.Name);
 
         }
 
-        public async void Fetch(String MoveName)
+        public void Fetch(String MoveName)
         {
             Task<PokeAPI.Move> MoveTask = FetchMove(MoveName);
+            move = MoveTask.Result;
+        }
+
+        public void Fetch(int MoveID)
+        {
+            Task<PokeAPI.Move> MoveTask = FetchMove(MoveID);
             move = MoveTask.Result;
         }
 
         public async Task<PokeAPI.Move> FetchMove(String MoveName)
         {
             return await DataFetcher.GetNamedApiObject<PokeAPI.Move>(MoveName);
+        }
+
+        public async Task<PokeAPI.Move> FetchMove(int MoveID)
+        {
+            return await DataFetcher.GetApiObject<PokeAPI.Move>(MoveID);
         }
 
         public bool HasStatus()
@@ -84,83 +117,5 @@ namespace PokeHack
             return this.EffectType;
         }
 
-        public void EffectStats(Pokemon attacker, Pokemon defender)
-        {
-            MoveStatChange[] StatChanges = move.StatChanges;
-            Random rand = new Random();
-            if (rand.Next(0, 99) < move.Meta.Value.StatChance || move.Meta.Value.StatChance == 0)
-            {
-                foreach (MoveStatChange StatChange in StatChanges)
-                {
-                    if (String.Compare(move.Target.Name, "user") == 0 ||
-                        String.Compare(move.Target.Name, "user-or-ally") == 0 ||
-                        String.Compare(move.Target.Name, "users-field") == 0 ||
-                        String.Compare(move.Target.Name, "user-and-allies") == 0)
-                        attacker.ModifyStat(StatChange.Change, StatChange.Stat.Name);
-                    else
-                        defender.ModifyStat(StatChange.Change, StatChange.Stat.Name);
-                }
-            }
-        }
-
-        private Type StringToType(string typename)
-        {
-
-            switch (typename[0])
-            {
-                case 'b':
-                    return Type.Bug;
-                case 'd':
-                    switch (typename[1])
-                    {
-                        case 'a':
-                            return Type.Dark;
-                        default:
-                            return Type.Dragon;
-                    }
-                case 'e':
-                    return Type.Electric;
-                case 'f':
-                    switch (typename[2])
-                    {
-                        case 'i':
-                            return Type.Fairy;
-                        case 'g':
-                            return Type.Fighting;
-                        case 'r':
-                            return Type.Fire;
-                        default:
-                            return Type.Flying;
-                    }
-                case 'g':
-                    switch (typename[4])
-                    {
-                        case 't':
-                            return Type.Ghost;
-                        case 's':
-                            return Type.Grass;
-                        default:
-                            return Type.Ground;
-                    }
-                case 'i':
-                    return Type.Ice;
-                case 'n':
-                    return Type.Normal;
-                case 'p':
-                    switch (typename[1])
-                    {
-                        case 'o':
-                            return Type.Poison;
-                        default:
-                            return Type.Psychic;
-                    }
-                case 'r':
-                    return Type.Rock;
-                case 's':
-                    return Type.Steel;
-                default:
-                    return Type.Water;
-            }
-        }
     }
 }
