@@ -20,6 +20,7 @@ namespace PokeHack
         {
             Name = ThisMove.Move.Name;
             Fetch(Name);
+            Console.WriteLine(Name);
 
             if (move.Accuracy != null)
                 Accuracy = (int)move.Accuracy;
