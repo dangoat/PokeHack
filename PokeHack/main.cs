@@ -23,7 +23,7 @@ namespace PokeHack
 
                 p1 = new Pokemon(25, 100);
                 p2 = new Pokemon(69, 100);
-                Move m1 = new Move(11); //scratch
+                Move m1 = new Move(11); //vicegrip
                 Move m11 = new Move(1); //pound
                 Move m2 = new Move(48); //supersonic
                 Move m3 = new Move(95); //hypnosis
@@ -87,12 +87,12 @@ namespace PokeHack
                 {
                     CombatRound(p1, p2);
                 }
-                else if (p1.HealthCurr < 0)
+                else if (p1.HealthCurr <= 0)
                 {
                     Console.WriteLine(p1.Name + " has fainted");
                     break;
                 }
-                else if (p2.HealthCurr < 0)
+                else if (p2.HealthCurr <= 0)
                 {
                     Console.WriteLine(p2.Name + " has fainted");
                     break;
