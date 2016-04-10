@@ -10,8 +10,6 @@ namespace PokeHack
 {
     class main
     {
-
-
         public static void Main()
         {
             Pokemon p1 = null, p2 = null;
@@ -83,10 +81,6 @@ namespace PokeHack
                 } while (!ValidPokemon);
             }
 
-            Console.WriteLine(p1.Name + " " + p1.Attack + " " + p1.Defense + " " + p1.HealthCurr + " " + p1.Speed);
-
-            Console.WriteLine(p2.Name + " " + p2.Attack + " " + p2.Defense + " " + p2.HealthCurr + " " + p2.Speed);
-
             while (true)
             {
                 if(p1.HealthCurr > 0 && p2.HealthCurr > 0)
@@ -104,9 +98,6 @@ namespace PokeHack
                     break;
                 }
                   
-                    
-                
-
             }
             Console.ReadLine();
         }
@@ -208,9 +199,7 @@ namespace PokeHack
 
             }
 
-        }
-
-       
+        }    
         
         //Picks move based on highest damage possible.
         //p1 is attacker, p2 is defender
