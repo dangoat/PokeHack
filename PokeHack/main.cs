@@ -321,7 +321,7 @@ namespace PokeHack
             return ToReturn;
         }
 
-        private  static int HitChance(Move m, Pokemon att, Pokemon def)
+        private static int HitChance(Move m, Pokemon att, Pokemon def)
         {
             return  m.Accuracy * att.Accuracy / def.Evasiveness;
         }

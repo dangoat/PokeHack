@@ -165,7 +165,19 @@ namespace PokeHack
                     return true;
                 }
             }
-            if (String.Compare(Ailment, "sleep") == 0)
+            if (String.Compare(Ailment, "infatuation") == 0)
+            {
+                if (rand.Next(1, 2) == 1)
+                {
+                    Console.WriteLine(Name + " cannot operate due to infatuation");
+                    return false;
+                }
+                else
+                {
+                    Console.WriteLine(Name + " wasn't affected by infatuation");
+                    return true;
+                }
+                if (String.Compare(Ailment, "sleep") == 0)
             {
                 if(AilmentTime > 0)
                 {
