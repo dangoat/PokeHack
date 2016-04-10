@@ -29,8 +29,23 @@ namespace PokeHack
         public String Ailment = "";
         public int AilmentTime = -1;
 
+        public Pokemon(string PokemonName, int level)
+        {
+            // Fetch the Pokemon by name
+            Console.WriteLine("Loadning pokemon " + PokemonName);
+            Fetch(PokemonName);
+
+            // Set Stats
+            Level = level;
+            Name = Poke.Name;
+
+            GenerateStats();
+            GenerateMoves();
+        }
+
         public Pokemon(int PokemonID, int level)
         {
+
             // Fetch the Pokemon data
             Console.Write("Loading Pokemon " + PokemonID);
             Fetch(PokemonID);
@@ -41,6 +56,12 @@ namespace PokeHack
 
             Console.Write(" - " + Name + "\n");
 
+            GenerateStats();
+            GenerateMoves();
+        }
+
+        private void GenerateStats()
+        {
             PokemonStats[] Stats = Poke.Stats;
 
             HealthMax = (Stats[5].BaseValue * 2 * Level / 100) + 10 + Level;
@@ -62,7 +83,10 @@ namespace PokeHack
             {
                 Type2 = StringToType(Types[1].Type.Name);
             }
+        }
 
+        private void GenerateMoves()
+        {
             //Randomly selects moves
             PokemonMove[] PossibleMoves = Poke.Moves;
 
@@ -86,10 +110,10 @@ namespace PokeHack
                     MoveSet[i] = new Move(PossibleMoves[randNum]);
                     UsedMoves[i] = randNum;
                 }
-            } else
-                for(int i = 0; i < PossibleMoves.Length; i++)
+            }
+            else
+                for (int i = 0; i < PossibleMoves.Length; i++)
                     MoveSet[i] = new Move(PossibleMoves[i]);
-
         }
 	
         public async void Fetch(int PokemonID)
@@ -100,14 +124,20 @@ namespace PokeHack
             Poke = PokeTask.Result;
         }
 
+        public async void Fetch (string PokemonName)
+        {
+            Task<PokeAPI.Pokemon> PokeTask = FetchPokemonByName(PokemonName);
+            Poke = PokeTask.Result;
+        }
+
         public async Task<PokeAPI.Pokemon> FetchPokemon(int PokemonID)
         {
             return await DataFetcher.GetApiObject<PokeAPI.Pokemon>(PokemonID);
         }
 
-        public async Task<PokemonSpecies> FetchSpecies(int PokemonID)
+        public async Task<PokeAPI.Pokemon> FetchPokemonByName(string PokemonName)
         {
-            return await DataFetcher.GetApiObject<PokemonSpecies>(PokemonID);
+            return await DataFetcher.GetNamedApiObject<PokeAPI.Pokemon>(PokemonName);
         }
        
 
