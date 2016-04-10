@@ -16,6 +16,28 @@ namespace PokeHack
         public Type Type;
         public string EffectType;
 
+        public Move(int MoveID)
+        {
+            Fetch(MoveID);
+            Name = move.Name;
+            Console.WriteLine(Name);
+
+            if (move.Accuracy != null)
+                Accuracy = (int)move.Accuracy;
+            if (move.EffectChance != null)
+                EffectChance = (int)move.EffectChance;
+            if (move.PP != null)
+                PowerPoints = (int)move.PP;
+            if (move.Power != null)
+                Power = (int)move.Power;
+
+            EffectType = move.Meta.Value.Ailment.Name;
+            if (EffectType.CompareTo("none") == 0)
+                EffectType = "";
+            DamageClass = move.DamageClass.Name;
+            Type = StringToType(move.Type.Name);
+        }
+
         public Move(PokemonMove ThisMove)
         {
             Name = ThisMove.Move.Name;
@@ -39,15 +61,26 @@ namespace PokeHack
 
         }
 
-        public async void Fetch(String MoveName)
+        public void Fetch(String MoveName)
         {
             Task<PokeAPI.Move> MoveTask = FetchMove(MoveName);
+            move = MoveTask.Result;
+        }
+
+        public void Fetch(int MoveID)
+        {
+            Task<PokeAPI.Move> MoveTask = FetchMove(MoveID);
             move = MoveTask.Result;
         }
 
         public async Task<PokeAPI.Move> FetchMove(String MoveName)
         {
             return await DataFetcher.GetNamedApiObject<PokeAPI.Move>(MoveName);
+        }
+
+        public async Task<PokeAPI.Move> FetchMove(int MoveID)
+        {
+            return await DataFetcher.GetApiObject<PokeAPI.Move>(MoveID);
         }
 
         public bool HasStatus()
