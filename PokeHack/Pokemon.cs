@@ -291,5 +291,58 @@ namespace PokeHack
             return (int)damage;
 		}
 
+        public void ModifyStat(int modifier, string statName)
+        {
+            if (String.Compare(statName, "accuracy") == 0)
+            {
+                if (modifier < 0)
+                    this.Accuracy = (int)(this.Accuracy * 3.0 / (3.0 - modifier));
+                else if (modifier > 0)
+                    this.Accuracy = (int)(this.Accuracy * (3.0 + modifier) / 3.0);
+            }
+            if (String.Compare(statName, "evasion") == 0)
+            {
+                if (modifier < 0)
+                    this.Evasiveness = (int)(this.Evasiveness * 3.0 / (3.0 - modifier));
+                else if (modifier > 0)
+                    this.Evasiveness = (int)(this.Evasiveness * (3.0 + modifier) / 3.0);
+            }
+            if (String.Compare(statName, "attack") == 0)
+            {
+                if (modifier < 0)
+                    this.Attack = (int)(this.Attack * 2.0 / (2.0 - modifier));
+                else if (modifier > 0)
+                    this.Attack = (int)(this.Attack * (2.0 + modifier) / 2.0);
+            }
+            if (String.Compare(statName, "defense") == 0)
+            {
+                if (modifier < 0)
+                    this.Defense = (int)(this.Defense * 2.0 / (2.0 - modifier));
+                else if (modifier > 0)
+                    this.Defense = (int)(this.Defense * (2.0 + modifier) / 2.0);
+            }
+            if (String.Compare(statName, "special-attack") == 0)
+            {
+                if (modifier < 0)
+                    this.SpecialAttack = (int)(this.SpecialAttack * 2.0 / (2.0 - modifier));
+                else if (modifier > 0)
+                    this.SpecialAttack = (int)(this.SpecialAttack * (2.0 + modifier) / 2.0);
+            }
+            if (String.Compare(statName, "special-defense") == 0)
+            {
+                if (modifier < 0)
+                    this.SpecialDefense = (int)(this.SpecialDefense * 2.0 / (2.0 - modifier));
+                else if (modifier > 0)
+                    this.SpecialDefense = (int)(this.SpecialDefense * (2.0 + modifier) / 2.0);
+            }
+            if (String.Compare(statName, "speed") == 0)
+            {
+                if (modifier < 0)
+                    this.Speed = (int)(this.Speed * 2.0 / (2.0 - modifier));
+                else if (modifier > 0)
+                    this.Speed = (int)(this.Speed * (2.0 + modifier) / 2.0);
+            }
+        }
+
     }
 }
