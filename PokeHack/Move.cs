@@ -9,7 +9,7 @@ namespace PokeHack
         private PokeAPI.Move move;
         public string Name;
         public int Accuracy = 100;
-        public int EffectChance = 0;
+        public int EffectChance = 100;
         public int PowerPoints;
         public int Power;
         public string DamageClass;
