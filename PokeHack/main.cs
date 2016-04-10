@@ -80,7 +80,7 @@ namespace PokeHack
                 if (p1.Speed >= p2.Speed)
                 {
                     p1m = PickMoveHighestPower(p1, p2);
-                    p2m = PickMoveSlowClock(p2, p1);
+                    p2m = PickMoveIncreaseClock(p2, p1);
                 }
 
             }
@@ -168,7 +168,7 @@ namespace PokeHack
         {
             Move p1m = null;
             string status;
-            double value;
+            double value, maxVal = 0;
             int clockDefense = CalculateClock(pDefense, pOffense);
             int clockOffense = CalculateClock(pOffense, pDefense);
 
@@ -180,22 +180,48 @@ namespace PokeHack
                     if (String.Compare(status, "paralysis") == 0)
                     {
                         value = NegBi(clockDefense, clockOffense, 0.25);
+                        if (value > maxVal)
+                        {
+                            p1m = m;
+                            maxVal = value;
+                        }
                     }
+                
                     else if (String.Compare(status, "asleep") == 0)
                     {
                         value = (5 - clockDefense + clockOffense) / 5;
+                        if (value > maxVal)
+                        {
+                            p1m = m;
+                            maxVal = value;
+                        }
                     }
                     else if (String.Compare(status, "confusion") == 0)
                     {
                         value = NegBi(clockDefense, clockOffense, .5) * ((4 - clockDefense + clockOffense) / 4);
+                        if (value > maxVal)
+                        {
+                            p1m = m;
+                            maxVal = value;
+                        }
                     }
                     else if (String.Compare(status, "freeze") == 0)
                     {
                         value = Math.Pow(.8, clockDefense - clockOffense);
+                        if (value > maxVal)
+                        {
+                            p1m = m;
+                            maxVal = value;
+                        }
                     }
                     else if (String.Compare(status, "infatuation") == 0)
                     {
                         value = NegBi(clockDefense, clockOffense, .5);
+                        if (value > maxVal)
+                        {
+                            p1m = m;
+                            maxVal = value;
+                        }
                     }
                     
                 }

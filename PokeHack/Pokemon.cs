@@ -114,6 +114,17 @@ namespace PokeHack
         public void TakeDamage(int damage) {
 			HealthCurr -= damage;
 		}
+        public bool CanAttack()
+        {
+            if (Ailment == "")
+                return true;
+            if (Ailment == ")
+        }
+        public void GiveAilment(string Ailment, int time)
+        {
+            this.Ailment = Ailment;
+            this.AilmentTime = time;
+        }
 
 		public int MoveDamage(Move move, Pokemon defender) {
             double damage = 0;
