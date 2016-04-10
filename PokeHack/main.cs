@@ -14,10 +14,43 @@ namespace PokeHack
 
         public static void Main()
         {
+            Pokemon p1 = null, p2 = null;
             Random rand = new Random();
-            
-            Pokemon p1 = new Pokemon(rand.Next(1, 721), 50);
-            Pokemon p2 = new Pokemon(rand.Next(1, 721), 50);
+            string Pokemon1 = null, Pokemon2 = null;
+            bool ValidPokemon = true;
+            int level = 0;
+
+            do
+            {
+                try
+                {
+                    Console.Write("Select pokemon one (or type random): ");
+                    Pokemon1 = Console.ReadLine();
+
+                    Console.Write("Select pokemon two (or type random): ");
+                    Pokemon2 = Console.ReadLine();
+
+                    if (level <= 0 || level > 100)
+                    {
+                        level = rand.Next(1, 100);
+                        Console.WriteLine("Invalid level, using random level: " + level);
+                    }
+
+                    if (Pokemon1.CompareTo("random") == 0)
+                        p1 = new Pokemon(rand.Next(1, 721), level);
+                    else
+                        p1 = new Pokemon(Pokemon1, level);
+                    if (Pokemon1.CompareTo("random") == 0)
+                        p2 = new Pokemon(rand.Next(1, 721), level);
+                    else
+                        p2 = new Pokemon(Pokemon2, level);
+                }
+                catch (NullReferenceException nre)
+                {
+                    Console.WriteLine("Oops, something went wrong. Try again./n");
+                    ValidPokemon = false;
+                }
+            } while (!ValidPokemon) ;
 
             Console.WriteLine(p1.Name + " " + p1.Attack + " " + p1.Defense + " " + p1.HealthCurr + " " + p1.Speed);
 
