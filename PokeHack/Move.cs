@@ -19,9 +19,7 @@ namespace PokeHack
         public Move(PokemonMove ThisMove)
         {
             Name = ThisMove.Move.Name;
-            Console.WriteLine("Loading Move " + Name);
             Fetch(Name);
-
 
             if (move.Accuracy != null)
                 Accuracy = (int)move.Accuracy;
@@ -32,8 +30,9 @@ namespace PokeHack
             if (move.Power != null)
                 Power = (int)move.Power;
 
-            MoveMetadata meta = (MoveMetadata)move.Meta;
-            EffectType = meta.Ailment.Name;
+            EffectType = move.Meta.Value.Ailment.Name;
+            if (EffectType.CompareTo("none") == 0)
+                EffectType = "";
             DamageClass = move.DamageClass.Name;
             Type = StringToType(move.Type.Name);
 
@@ -126,4 +125,3 @@ namespace PokeHack
         }
     }
 }
-

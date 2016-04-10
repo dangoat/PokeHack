@@ -153,10 +153,10 @@ namespace PokeHack
             Move p1m = null;
             foreach (Move m in p1.MoveSet)
             {
-                if (p1.MoveDamage(m, p2) > maxpower)
+                if (p1.MoveDamage(m, p2) * HitChance(m, p1, p2) > maxpower)
                 {
                     p1m = m;
-                    maxpower = p1.MoveDamage(m, p2);
+                    maxpower = p1.MoveDamage(m, p2) * HitChance(m, p1, p2);
                 }
             }
             if (p1m == null)
