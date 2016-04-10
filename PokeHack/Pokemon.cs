@@ -222,6 +222,7 @@ namespace PokeHack
                     Console.WriteLine(Name + " has shed their confusion");
                     return true;
                 }
+
                 if (rand.Next(1, 2) == 1)
                 {
                     this.TakeDamage((int)((double)(2 * this.Level + 10) / 250.0 * (double)(this.Attack) / this.Defense * 40));
