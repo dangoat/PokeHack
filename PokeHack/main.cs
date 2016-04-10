@@ -30,6 +30,9 @@ namespace PokeHack
                     Console.Write("Select pokemon two (or type random): ");
                     Pokemon2 = Console.ReadLine();
 
+                    Console.Write("Select a level for the pokemon to be: ");
+                    level = Int32.Parse(Console.ReadLine());
+
                     if (level <= 0 || level > 100)
                     {
                         level = rand.Next(1, 100);
@@ -45,9 +48,10 @@ namespace PokeHack
                     else
                         p2 = new Pokemon(Pokemon2, level);
                 }
-                catch (NullReferenceException nre)
+                catch (Exception e)
                 {
-                    Console.WriteLine("Oops, something went wrong. Try again./n");
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine("\nOops, something went wrong. Try again.\n");
                     ValidPokemon = false;
                 }
             } while (!ValidPokemon) ;

@@ -116,7 +116,7 @@ namespace PokeHack
                     MoveSet[i] = new Move(PossibleMoves[i]);
         }
 	
-        public async void Fetch(int PokemonID)
+        public void Fetch(int PokemonID)
         {
             if (PokemonID == 132)
                 PokemonID++;
@@ -124,7 +124,7 @@ namespace PokeHack
             Poke = PokeTask.Result;
         }
 
-        public async void Fetch (string PokemonName)
+        public void Fetch (string PokemonName)
         {
             Task<PokeAPI.Pokemon> PokeTask = FetchPokemonByName(PokemonName);
             Poke = PokeTask.Result;
