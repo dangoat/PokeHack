@@ -22,13 +22,12 @@ namespace PokeHack
         public int Speed;
 		public int Accuracy = 100;
 		public int Evasiveness = 100;
-		private int Happiness;
-		private int Weight;
 		private Type Type1;
         private Type Type2 = Type.None;
         public String Ailment = "";
         public int AilmentTime = -1;
 
+        // Cunstructor by name
         public Pokemon(string PokemonName, int level)
         {
             // Fetch the Pokemon by name
@@ -43,6 +42,7 @@ namespace PokeHack
             GenerateMoves();
         }
 
+        // Cunstructor by ID
         public Pokemon(int PokemonID, int level)
         {
 
@@ -72,9 +72,6 @@ namespace PokeHack
             SpecialAttack = (Stats[2].BaseValue * 2 * Level / 100) + 5;
             SpecialDefense = (Stats[1].BaseValue * 2 * Level / 100) + 5;
             Speed = (Stats[0].BaseValue * 2 * Level / 100) + 5;
-
-            // Happiness = p.Happiness;
-            // Weight = p.Weight;
 
             // Set Types
             PokemonTypeMap[] Types = Poke.Types;
@@ -116,6 +113,7 @@ namespace PokeHack
                     MoveSet[i] = new Move(PossibleMoves[i]);
         }
 	
+        // Fetch by ID
         public void Fetch(int PokemonID)
         {
             if (PokemonID == 132)
@@ -124,26 +122,31 @@ namespace PokeHack
             Poke = PokeTask.Result;
         }
 
+        // Fetch by name
         public void Fetch (string PokemonName)
         {
             Task<PokeAPI.Pokemon> PokeTask = FetchPokemonByName(PokemonName);
             Poke = PokeTask.Result;
         }
 
+        // Fetch Task by ID
         public async Task<PokeAPI.Pokemon> FetchPokemon(int PokemonID)
         {
             return await DataFetcher.GetApiObject<PokeAPI.Pokemon>(PokemonID);
         }
 
+        // Fetch Task by name
         public async Task<PokeAPI.Pokemon> FetchPokemonByName(string PokemonName)
         {
             return await DataFetcher.GetNamedApiObject<PokeAPI.Pokemon>(PokemonName);
         }
-       
 
+        // Inflict damage
         public void TakeDamage(int damage) {
 			HealthCurr -= damage;
 		}
+
+        // Is the capable of attacking
         public bool CanAttack()
         {
             Random rand = new Random();
@@ -217,8 +220,17 @@ namespace PokeHack
                     return true;
                 }
             }
-            else return true;
+            if (String.Compare(Ailment, "poison") == 0 || 
+                String.Compare(Ailment, "burn") == 0 || 
+                String.Compare(Ailment, "leech-seed") == 0)
+            {
+                this.TakeDamage(HealthMax / 8);
+            }
+
+            return true;
         }
+
+        // Give this pokemon an ailment
         public void GiveAilment(string Ailment, int time)
         {
             if (String.Compare(Ailment, "") != 0 && String.Compare(this.Ailment, "") != 0)
@@ -233,57 +245,28 @@ namespace PokeHack
             
         }
 
+        // Take either heal or recoil
         public void TakeHealRecoil(int healRecoil)
         {
             HealthCurr += healRecoil;
         }
 
-		public int MoveDamage(Move move, Pokemon defender) {
+        // Determine the damage dealt by a move
+		public int MoveDamage(Move move, Pokemon defender)
+        {
             double damage = 0;
             if (String.Compare(move.DamageClass, "physical") == 0)
             {
-                damage = (double)(2 * this.Level + 10) / 250.0 * (double)(this.Attack) / defender.Defense * move.Power * GetModifier(move.Type, defender.Type1, defender.Type2);
+                damage = (double)(2 * this.Level + 10) / 250.0 * (double)(this.Attack) / defender.Defense * move.Power * Types.GetModifier(move.Type, defender.Type1, defender.Type2);
             }
             else if (String.Compare(move.DamageClass, "special") == 0)
-                damage = (double)(2 * this.Level + 10) / 250.0 * (double)(this.SpecialAttack) / defender.SpecialDefense * move.Power * GetModifier(move.Type, defender.Type1, defender.Type2);
+                damage = (double)(2 * this.Level + 10) / 250.0 * (double)(this.SpecialAttack) / defender.SpecialDefense * move.Power * Types.GetModifier(move.Type, defender.Type1, defender.Type2);
             if (move.Type == this.Type1 || move.Type == this.Type2)
                 damage *= 1.5;
 
 
             return (int)damage;
 		}
-		
-		public static double GetModifier(Type attack, Type t1, Type t2)
-	        {
-	            double modifier = 1;
-	            //Attack is row, Defense is column
-	            double[,] resistances = new double[,] {
-	            {  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, .5,  0,  1,  1, .5,  1},
-	            {  1, .5, .5,  1,  2,  2,  1,  1,  1,  1,  1,  2, .5,  1, .5,  1,  2,  1},
-	            {  1,  2, .5,  1, .5,  1,  1,  1,  2,  1,  1,  1,  2,  1, .5,  1,  1,  1},
-	            {  1,  1,  2, .5, .5,  1,  1,  1,  0,  2,  1,  1,  1,  1, .5,  1,  1,  1},
-	            {  1, .5,  2,  1, .5,  1,  1, .5,  2, .5,  1, .5,  2,  1, .5,  1, .5,  1},
-	            {  1, .5, .5,  1,  2, .5,  1,  1,  2,  2,  1,  1,  1,  1,  2,  1, .5,  1},
-	            {  2,  1,  1,  1,  1,  2,  1, .5,  1, .5, .5, .5,  2,  0,  1,  2,  2, .5},
-	            {  1,  1,  1,  1,  2,  1,  1, .5, .5,  1,  1,  1, .5, .5,  1,  1,  0,  2},
-	            {  1,  2,  1,  2, .5,  1,  1,  2,  1,  0,  1, .5,  2,  1,  1,  1,  2,  1},
-	            {  1,  1,  1, .5,  2,  1,  2,  1,  1,  1,  1,  2, .5,  1,  1,  1, .5,  1},
-	            {  1,  1,  1,  1,  1,  1,  2,  2,  1,  1, .5,  1,  1,  1,  1,  0, .5,  1},
-	            {  1, .5,  1,  1,  2,  1, .5, .5,  1, .5,  2,  1,  1, .5,  1,  2, .5, .5},
-	            {  1,  2,  1,  1,  1,  2, .5,  1, .5,  2,  1,  2,  1,  1,  1,  1, .5,  1},
-	            {  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  1,  1,  2,  1, .5,  1,  1},
-	            {  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  1, .5,  0},
-	            {  1,  1,  1,  1,  1,  1, .5,  1,  1,  1,  2,  1,  1,  2,  1, .5,  1,  1},
-	            {  1, .5, .5, .5,  1,  2,  1,  1,  1,  1,  1,  1,  2,  1,  1,  1, .5,  1},
-	            {  1, .5,  1,  1,  1,  1,  2, .5,  1,  1,  1,  1,  1,  1,  2,  2, .5,  1}};
-	
-	            modifier *= resistances[(int)attack, (int)t1];
-	
-	            if (t2 != Type.None)
-	                modifier *= resistances[(int)attack, (int)t2];
-	
-	            return modifier;
-	        }
 
         private Type StringToType(string typename)
         {

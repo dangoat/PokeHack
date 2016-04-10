@@ -16,9 +16,10 @@ namespace PokeHack
         public Type Type;
         public string EffectType;
 
-        public Move (string name)
+        public Move(int MoveID)
         {
-            Fetch(Name);
+            Fetch(MoveID);
+            Name = move.Name;
             Console.WriteLine(Name);
 
             if (move.Accuracy != null)
@@ -66,9 +67,20 @@ namespace PokeHack
             move = MoveTask.Result;
         }
 
+        public void Fetch(int MoveID)
+        {
+            Task<PokeAPI.Move> MoveTask = FetchMove(MoveID);
+            move = MoveTask.Result;
+        }
+
         public async Task<PokeAPI.Move> FetchMove(String MoveName)
         {
             return await DataFetcher.GetNamedApiObject<PokeAPI.Move>(MoveName);
+        }
+
+        public async Task<PokeAPI.Move> FetchMove(int MoveID)
+        {
+            return await DataFetcher.GetApiObject<PokeAPI.Move>(MoveID);
         }
 
         public bool HasStatus()
