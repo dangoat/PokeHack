@@ -54,6 +54,20 @@ namespace PokeHack
             return EffectType != null;
         }
 
+        public int GetTime()
+        {
+            Random rand = new Random();
+            if(String.Compare(this.EffectType, "sleep") == 0)
+            {
+                return rand.Next(1, 5);
+            }
+            if (String.Compare(this.EffectType, "confusion") == 0)
+            {
+                return rand.Next(1, 4);
+            }
+            else return -1;
+        }
+
         public int HealOrRecoil()
         {
             return move.Meta.Value.DrainRecoil;
