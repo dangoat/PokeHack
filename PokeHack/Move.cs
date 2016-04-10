@@ -54,6 +54,11 @@ namespace PokeHack
             return EffectType != null;
         }
 
+        public int HealOrRecoil()
+        {
+            return move.Meta.Value.DrainRecoil;
+        }
+
         public string GetStatus()
         {
             Random random = new Random();
