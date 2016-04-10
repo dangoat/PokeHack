@@ -63,7 +63,27 @@ namespace PokeHack
 
         public static void CombatRound(Pokemon p1, Pokemon p2)
         {
+            Move p1m = null, p2m = null;
+            int clock1 = CalculateClock(p1, p2);
+            int clock2 = CalculateClock(p1, p2);
+            if (clock1 < clock2)
+            {
 
+                p1m = PickMoveHighestPower(p1, p2);
+            }
+            else if (clock2 < clock1)
+            {
+                p2m = PickMoveHighestPower(p2, p1);
+            }
+            else
+            {
+                if (p1.Speed >= p2.Speed)
+                {
+                    p1m = PickMoveHighestPower(p1, p2);
+                    p2m = PickMoveSlowClock(p2, p1);
+                }
+
+            }
         }
 
         public static void PrimitiveCombatRound(Pokemon p1, Pokemon p2)
@@ -140,8 +160,64 @@ namespace PokeHack
                 }
             }
             if (p1m == null)
-                p1m = p1.MoveSet[0];
+                p1m = PickMoveIncreaseClock(p1, p2);
             return p1m;
+        }
+
+        private static Move PickMoveIncreaseClock(Pokemon pDefense, Pokemon pOffense)
+        {
+            Move p1m = null;
+            string status;
+            double value;
+            int clockDefense = CalculateClock(pDefense, pOffense);
+            int clockOffense = CalculateClock(pOffense, pDefense);
+
+            foreach(Move m in pDefense.MoveSet)
+            {
+                if (m.HasStatus())
+                {
+                    status = m.GetStatus();
+                    if (String.Compare(status, "paralysis") == 0)
+                    {
+                        value = NegBi(clockDefense, clockOffense, 0.25);
+                    }
+                    else if (String.Compare(status, "asleep") == 0)
+                    {
+                        value = (5 - clockDefense + clockOffense) / 5;
+                    }
+                    else if (String.Compare(status, "confusion") == 0)
+                    {
+                        value = NegBi(clockDefense, clockOffense, .5) * ((4 - clockDefense + clockOffense) / 4);
+                    }
+                    else if (String.Compare(status, "freeze") == 0)
+                    {
+                        value = Math.Pow(.8, clockDefense - clockOffense);
+                    }
+                    else if (String.Compare(status, "infatuation") == 0)
+                    {
+                        value = NegBi(clockDefense, clockOffense, .5);
+                    }
+                    
+                }
+            }
+        }
+
+        private static double NegBi(int clockDefense, int clockOffense, double prob)
+        {
+            int diff = clockDefense - clockOffense;
+            double ToReturn = (double)Fact(clockDefense - 1) / (double)(Fact(diff)) * 
+                Math.Pow(prob, diff) * Math.Pow(1 - prob, clockOffense);
+            return ToReturn;
+        }
+        private static int Fact(int n)
+        {
+            int ToReturn = 1;
+            while (n > 1)
+            {
+                ToReturn *= n;
+                n--;
+            }
+            return ToReturn;
         }
 
         private  static int HitChance(Move m, Pokemon att, Pokemon def)

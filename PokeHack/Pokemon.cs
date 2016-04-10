@@ -27,6 +27,7 @@ namespace PokeHack
 		private Type Type1;
         private Type Type2 = Type.None;
         public String Ailment = "";
+        private int AilmentTime = -1;
 
         public Pokemon(int PokemonID, int level)
         {
@@ -124,6 +125,8 @@ namespace PokeHack
                 damage = (double)(2 * this.Level + 10) / 250.0 * (double)(this.SpecialAttack) / defender.SpecialDefense * move.Power * GetModifier(move.Type, defender.Type1, defender.Type2);
             if (move.Type == this.Type1 || move.Type == this.Type2)
                 damage *= 1.5;
+
+
             return (int)damage;
 		}
 		

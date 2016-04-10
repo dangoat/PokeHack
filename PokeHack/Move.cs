@@ -58,7 +58,7 @@ namespace PokeHack
         public string GetStatus()
         {
             Random random = new Random();
-            int EffectHappens = random.Next(0, 100);
+            int EffectHappens = random.Next(1, 100);
             if (EffectHappens > this.EffectChance)
                 return "";
 
