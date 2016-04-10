@@ -32,7 +32,7 @@ namespace PokeHack
         public Pokemon(string PokemonName, int level)
         {
             // Fetch the Pokemon by name
-            Console.WriteLine("Loadning pokemon " + PokemonName);
+            Console.WriteLine("Loading pokemon " + PokemonName);
             Fetch(PokemonName);
 
             // Set Stats
