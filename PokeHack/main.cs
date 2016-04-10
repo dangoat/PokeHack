@@ -164,8 +164,8 @@ namespace PokeHack
                     {
                         int damage = p1.MoveDamage(p1m, p2);
                         p2.TakeDamage(damage);
-                        p2.GiveAilment(p1m.GetStatus(), p1m.GetTime());
                         Console.WriteLine(p1.Name + " used " + p1m.Name + " for " + damage + " damage");
+                        p2.GiveAilment(p1m.GetStatus(), p1m.GetTime());
                     }
                     else Console.WriteLine(p1.Name + "'s " + p1m.Name + " missed");
                 }
@@ -175,8 +175,8 @@ namespace PokeHack
                     {
                         int damage = p2.MoveDamage(p2m, p1);
                         p1.TakeDamage(damage);
-                        p1.GiveAilment(p2m.GetStatus(), p2m.GetTime());
                         Console.WriteLine(p2.Name + " used " + p2m.Name + " for " + damage + " damage");
+                        p1.GiveAilment(p2m.GetStatus(), p2m.GetTime());
                     }
                     else Console.WriteLine(p2.Name + "'s " + p2m.Name + " missed");
                 }
@@ -185,23 +185,23 @@ namespace PokeHack
             {
                 if (p2.CanAttack())
                 {
-                    if (p1.rand.Next(1, 100) < HitChance(p2m, p2, p1)) //Check for miss
+                    if (p2.rand.Next(1, 100) < HitChance(p2m, p2, p1)) //Check for miss
                     {
                         int damage = p2.MoveDamage(p2m, p1);
                         p1.TakeDamage(damage);
-                        p1.GiveAilment(p2m.GetStatus(), p2m.GetTime());
                         Console.WriteLine(p2.Name + " used " + p2m.Name + " for " + damage + " damage");
+                        p1.GiveAilment(p2m.GetStatus(), p2m.GetTime());
                     }
                     else Console.WriteLine(p2.Name + "'s " + p2m.Name + " missed");
                 }
                 if (p1.CanAttack() && p1.HealthCurr > 0) //Enact Status Effects
                 {
-                    if (p2.rand.Next(1, 100) < HitChance(p1m, p1, p2)) //Check for miss
+                    if (p1.rand.Next(1, 100) < HitChance(p1m, p1, p2)) //Check for miss
                     {
                         int damage = p1.MoveDamage(p1m, p2);
                         p2.TakeDamage(damage);
-                        p2.GiveAilment(p1m.GetStatus(), p1m.GetTime());
                         Console.WriteLine(p1.Name + " used " + p1m.Name + " for " + damage + " damage");
+                        p2.GiveAilment(p1m.GetStatus(), p1m.GetTime());
                     }
                     else Console.WriteLine(p1.Name + "'s " + p1m.Name + " missed");
                 }
