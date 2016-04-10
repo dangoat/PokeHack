@@ -189,7 +189,7 @@ namespace PokeHack
                         }
                     }
                 
-                    else if (String.Compare(status, "asleep") == 0)
+                    else if (String.Compare(status, "sleep") == 0)
                     {
                         value = (5 - clockDefense + clockOffense) / 5;
                         if (value > maxVal)

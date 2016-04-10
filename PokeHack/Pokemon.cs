@@ -118,7 +118,22 @@ namespace PokeHack
         {
             if (Ailment == "")
                 return true;
-            if (Ailment == ")
+            if (String.Compare(Ailment, "paralysis") == 0)
+            {
+
+            }
+            if (String.Compare(Ailment, "sleep") == 0)
+            {
+
+            }
+            if (String.Compare(Ailment, "freeze") == 0)
+            {
+
+            }
+            if (String.Compare(Ailment, "confusion") == 0)
+            {
+
+            }
         }
         public void GiveAilment(string Ailment, int time)
         {
