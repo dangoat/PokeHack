@@ -74,11 +74,11 @@ namespace PokeHack
             Speed = (Stats[0].BaseValue * 2 * Level / 100) + 5;
 
             // Set Types
-            PokemonTypeMap[] Types = Poke.Types;
-            Type1 = StringToType(Types[0].Type.Name);
-            if (Types.Length > 1)
+            PokemonTypeMap[] TypeMap = Poke.Types;
+            Type1 = Types.StringToType(TypeMap[0].Type.Name);
+            if (TypeMap.Length > 1)
             {
-                Type2 = StringToType(Types[1].Type.Name);
+                Type2 = Types.StringToType(TypeMap[1].Type.Name);
             }
         }
 
@@ -268,63 +268,5 @@ namespace PokeHack
             return (int)damage;
 		}
 
-        private Type StringToType(string typename)
-        {
-            switch (typename[0])
-            {
-                case 'b':
-                    return Type.Bug;
-                case 'd':
-                    switch (typename[1])
-                    {
-                        case 'a':
-                            return Type.Dark;
-                        default:
-                            return Type.Dragon;
-                    }
-                case 'e':
-                    return Type.Electric;
-                case 'f':
-                    switch (typename[2])
-                    {
-                        case 'i':
-                            return Type.Fairy;
-                        case 'g':
-                            return Type.Fighting;
-                        case 'r':
-                            return Type.Fire;
-                        default:
-                            return Type.Flying;
-                    }
-                case 'g':
-                    switch (typename[4])
-                    {
-                        case 't':
-                            return Type.Ghost;
-                        case 's':
-                            return Type.Grass;
-                        default:
-                            return Type.Ground;
-                    }
-                case 'i':
-                    return Type.Ice;
-                case 'n':
-                    return Type.Normal;
-                case 'p':
-                    switch (typename[1])
-                    {
-                        case 'o':
-                            return Type.Poison;
-                        default:
-                            return Type.Psychic;
-                    }
-                case 'r':
-                    return Type.Rock;
-                case 's':
-                    return Type.Steel;
-                default:
-                    return Type.Water;
-            }
-        }
     }
 }
