@@ -137,7 +137,7 @@ namespace PokeHack
 
         public async Task<PokeAPI.Pokemon> FetchPokemonByName(string PokemonName)
         {
-            return await DataFetcher.GetNamedApiObject<PokemonSpecies>(PokemoNName);
+            return await DataFetcher.GetNamedApiObject<PokeAPI.Pokemon>(PokemonName);
         }
        
 
