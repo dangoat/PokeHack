@@ -217,7 +217,14 @@ namespace PokeHack
                     return true;
                 }
             }
-            else return true;
+            if (String.Compare(Ailment, "poison") == 0 || 
+                String.Compare(Ailment, "burn") == 0 || 
+                String.Compare(Ailment, "leech-seed") == 0)
+            {
+                this.TakeDamage(HealthMax / 8);
+            }
+
+            return true;
         }
         public void GiveAilment(string Ailment, int time)
         {
