@@ -221,8 +221,16 @@ namespace PokeHack
         }
         public void GiveAilment(string Ailment, int time)
         {
+            if (String.Compare(Ailment, "") != 0 && String.Compare(this.Ailment, "") != 0)
+            {
+                Console.WriteLine("But it's already affected by " + Ailment);
+                return;
+            }
             this.Ailment = Ailment;
             this.AilmentTime = time;
+            if (String.Compare(Ailment, "") != 0)
+                Console.WriteLine(Name + " now has the Ailment " + Ailment);
+            
         }
 
         public void TakeHealRecoil(int healRecoil)

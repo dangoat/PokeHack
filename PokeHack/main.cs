@@ -17,44 +17,70 @@ namespace PokeHack
             Pokemon p1 = null, p2 = null;
             Random rand = new Random();
             string Pokemon1 = null, Pokemon2 = null;
-            bool ValidPokemon = true;
+            bool ValidPokemon = true, testing = true;
             int level = 0;
 
-            do
+            if (testing)
             {
-                try
+                p1 = new Pokemon(25, 100);
+                p2 = new Pokemon(69, 100);
+                Move m1 = new Move("scratch");
+                Move m11 = new Move("pound");
+                Move m2 = new Move("supersonic");
+                Move m3 = new Move("hypnosis");
+                Move m4 = new Move("thunder-wave");
+
+                System.Threading.Thread.Sleep(2000);
+
+                p1.MoveSet[0] = m1;
+                p1.MoveSet[1] = m2;
+                p1.MoveSet[2] = m3;
+                p1.MoveSet[3] = m4;
+
+                p2.MoveSet[0] = m11;
+                p2.MoveSet[1] = m2;
+                p2.MoveSet[2] = m3;
+                p2.MoveSet[3] = m4;
+            }
+            else
+            {
+                do
                 {
-                    Console.Write("Select pokemon one (or type random): ");
-                    Pokemon1 = Console.ReadLine();
-
-                    Console.Write("Select pokemon two (or type random): ");
-                    Pokemon2 = Console.ReadLine();
-
-                    Console.Write("Select a level for the pokemon to be: ");
-                    level = Int32.Parse(Console.ReadLine());
-
-                    if (level <= 0 || level > 100)
+                    ValidPokemon = true;
+                    try
                     {
-                        level = rand.Next(1, 100);
-                        Console.WriteLine("Invalid level, using random level: " + level);
-                    }
+                        Console.Write("Select pokemon one (or type random): ");
+                        Pokemon1 = Console.ReadLine();
 
-                    if (Pokemon1.CompareTo("random") == 0)
-                        p1 = new Pokemon(rand.Next(1, 721), level);
-                    else
-                        p1 = new Pokemon(Pokemon1, level);
-                    if (Pokemon1.CompareTo("random") == 0)
-                        p2 = new Pokemon(rand.Next(1, 721), level);
-                    else
-                        p2 = new Pokemon(Pokemon2, level);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine("\nOops, something went wrong. Try again.\n");
-                    ValidPokemon = false;
-                }
-            } while (!ValidPokemon) ;
+                        Console.Write("Select pokemon two (or type random): ");
+                        Pokemon2 = Console.ReadLine();
+
+                        Console.Write("Select a level for the pokemon to be: ");
+                        level = Int32.Parse(Console.ReadLine());
+
+                        if (level <= 0 || level > 100)
+                        {
+                            level = rand.Next(1, 100);
+                            Console.WriteLine("Invalid level, using random level: " + level);
+                        }
+
+                        if (Pokemon1.CompareTo("random") == 0)
+                            p1 = new Pokemon(rand.Next(1, 721), level);
+                        else
+                            p1 = new Pokemon(Pokemon1, level);
+                        if (Pokemon1.CompareTo("random") == 0)
+                            p2 = new Pokemon(rand.Next(1, 721), level);
+                        else
+                            p2 = new Pokemon(Pokemon2, level);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                        Console.WriteLine("\nOops, something went wrong. Try again.\n");
+                        ValidPokemon = false;
+                    }
+                } while (!ValidPokemon);
+            }
 
             Console.WriteLine(p1.Name + " " + p1.Attack + " " + p1.Defense + " " + p1.HealthCurr + " " + p1.Speed);
 
