@@ -96,17 +96,21 @@ namespace PokeHack
 
         public static void CombatRound(Pokemon p1, Pokemon p2)
         {
+            Random rand = new Random();
             Move p1m = null, p2m = null;
             int clock1 = CalculateClock(p1, p2);
             int clock2 = CalculateClock(p1, p2);
+
+            //Pick strategies and moves
             if (clock1 < clock2)
             {
-
+                p2m = PickMoveIncreaseClock(p2, p1);
                 p1m = PickMoveHighestPower(p1, p2);
             }
             else if (clock2 < clock1)
             {
                 p2m = PickMoveHighestPower(p2, p1);
+                p1m = PickMoveIncreaseClock(p1, p2);
             }
             else
             {
@@ -115,32 +119,33 @@ namespace PokeHack
                     p1m = PickMoveHighestPower(p1, p2);
                     p2m = PickMoveIncreaseClock(p2, p1);
                 }
-
-            }
-        }
-
-        public static void PrimitiveCombatRound(Pokemon p1, Pokemon p2)
-        {
-            Move p1m = null, p2m = null;
-            Random rand = new Random();
-
-            p1m = PickMoveHighestPower(p1, p2);
-            p2m = PickMoveHighestPower(p2, p1);
-            if (p1.Speed > p2.Speed)
-            {
-                if (rand.Next(1, 100) < HitChance(p1m, p1, p2)) //Check for miss
+                else
                 {
-                    int damage = p1.MoveDamage(p1m, p2);
-                    p2.TakeDamage(damage);
-                    Console.WriteLine(p1.Name + " used " + p1m.Name + " for " + damage + " damage");
+                    p2m = PickMoveHighestPower(p2, p1);
+                    p1m = PickMoveIncreaseClock(p1, p2);
                 }
-                else Console.WriteLine(p1.Name + "'s " +  p1m.Name + " missed");
-                if (p2.HealthCurr > 0) //Check for kill
-                { 
-                    if (rand.Next(1, 100) < HitChance(p2m, p2, p1))
+            }
+            //Perform Attacks
+            if(p1.Speed >= p2.Speed)
+            {
+                if (p1.CanAttack()) //Enact Status Effects
+                {
+                    if (rand.Next(1, 100) < HitChance(p1m, p1, p2)) //Check for miss
+                    {
+                        int damage = p1.MoveDamage(p1m, p2);
+                        p2.TakeDamage(damage);
+                        p2.GiveAilment(p1m.GetStatus(), p1m.GetTime());
+                        Console.WriteLine(p1.Name + " used " + p1m.Name + " for " + damage + " damage");
+                    }
+                    else Console.WriteLine(p1.Name + "'s " + p1m.Name + " missed");
+                }
+                if (p2.CanAttack() && p2.HealthCurr > 0)
+                {
+                    if (rand.Next(1, 100) < HitChance(p2m, p2, p1)) //Check for miss
                     {
                         int damage = p2.MoveDamage(p2m, p1);
                         p1.TakeDamage(damage);
+                        p1.GiveAilment(p2m.GetStatus(), p2m.GetTime());
                         Console.WriteLine(p2.Name + " used " + p2m.Name + " for " + damage + " damage");
                     }
                     else Console.WriteLine(p2.Name + "'s " + p2m.Name + " missed");
@@ -148,37 +153,34 @@ namespace PokeHack
             }
             else
             {
-                if (rand.Next(1, 100) < HitChance(p2m, p2, p1))
+                if (p2.CanAttack())
                 {
-                    p1.TakeDamage(p2.MoveDamage(p2m, p1));
-                    Console.WriteLine(p2.Name + " used " + p2m.Name + " for " + p2.MoveDamage(p2m, p1) + " damage");
-                    if (p2m.HasStatus())
+                    if (rand.Next(1, 100) < HitChance(p2m, p2, p1)) //Check for miss
                     {
-                        p1.Ailment = p2m.GetStatus();
-                        if (p1.Ailment.CompareTo("") != 0)
-                            Console.WriteLine(p1.Name + " has become " + p1.Ailment);
+                        int damage = p2.MoveDamage(p2m, p1);
+                        p1.TakeDamage(damage);
+                        p1.GiveAilment(p2m.GetStatus(), p2m.GetTime());
+                        Console.WriteLine(p2.Name + " used " + p2m.Name + " for " + damage + " damage");
                     }
-                    p2.TakeHealRecoil(p2m.HealOrRecoil());
+                    else Console.WriteLine(p2.Name + "'s " + p2m.Name + " missed");
                 }
-                else Console.WriteLine(p2.Name + "'s " + p2m.Name + " missed");
-                if (p1.HealthCurr > 0)
+                if (p1.CanAttack() && p1.HealthCurr > 0) //Enact Status Effects
                 {
-                    if (rand.Next(1, 100) < HitChance(p1m, p1, p2))
+                    if (rand.Next(1, 100) < HitChance(p1m, p1, p2)) //Check for miss
                     {
-                        p2.TakeDamage(p1.MoveDamage(p1m, p2));
-                        Console.WriteLine(p1.Name + " used " + p1m.Name + " for " + p1.MoveDamage(p1m, p2) + " damage");
-                        if (p1m.HasStatus())
-                        {
-                            p2.Ailment = p1m.GetStatus();
-                            if (p2.Ailment.CompareTo("") != 0)
-                                Console.WriteLine(p2.Name + " has become " + p2.Ailment);
-                        }
-                        p1.TakeHealRecoil(p1m.HealOrRecoil());
+                        int damage = p1.MoveDamage(p1m, p2);
+                        p2.TakeDamage(damage);
+                        p2.GiveAilment(p1m.GetStatus(), p1m.GetTime());
+                        Console.WriteLine(p1.Name + " used " + p1m.Name + " for " + damage + " damage");
                     }
                     else Console.WriteLine(p1.Name + "'s " + p1m.Name + " missed");
                 }
+
             }
+
         }
+
+       
         
         //Picks move based on highest damage possible.
         //p1 is attacker, p2 is defender
@@ -261,6 +263,10 @@ namespace PokeHack
                     
                 }
             }
+            if (p1m == null)
+                p1m = PickMoveHighestPower(pOffense, pDefense);
+            return p1m;
+
         }
 
         private static double NegBi(int clockDefense, int clockOffense, double prob)

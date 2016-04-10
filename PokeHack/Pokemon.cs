@@ -27,7 +27,7 @@ namespace PokeHack
 		private Type Type1;
         private Type Type2 = Type.None;
         public String Ailment = "";
-        private int AilmentTime = -1;
+        public int AilmentTime = -1;
 
         public Pokemon(string PokemonName, int level)
         {
@@ -146,24 +146,78 @@ namespace PokeHack
 		}
         public bool CanAttack()
         {
+            Random rand = new Random();
             if (Ailment == "")
                 return true;
             if (String.Compare(Ailment, "paralysis") == 0)
             {
-
+                if (rand.Next(1, 4) == 1)
+                {
+                    Console.WriteLine(Name + " cannot operate due to paralysis");
+                    return false;
+                }
+                else
+                {
+                    Console.WriteLine(Name + " wasn't affected by paralysis");
+                    return true;
+                }
             }
             if (String.Compare(Ailment, "sleep") == 0)
             {
-
+                if(AilmentTime > 0)
+                {
+                    AilmentTime--;
+                    Console.WriteLine(Name + " is snoozing");
+                    return false;
+                }
+                else
+                {
+                    AilmentTime = -1;
+                    Ailment = "";
+                    Console.WriteLine(Name + " woke up");
+                    return true;
+                }
             }
             if (String.Compare(Ailment, "freeze") == 0)
             {
-
+                if (rand.Next(1, 5) == 1)
+                {
+                    Ailment = "";
+                    AilmentTime = -1;
+                    Console.WriteLine(Name + " thawed");
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine(Name + " remains frozen");
+                    return false;
+                }
             }
             if (String.Compare(Ailment, "confusion") == 0)
             {
-
+                if (AilmentTime > 0)
+                {
+                    AilmentTime--;
+                }
+                else
+                {
+                    Ailment = "";
+                    AilmentTime = -1;
+                    Console.WriteLine(Name + " has shed their confusion");
+                    return true;
+                }
+                if (rand.Next(1, 2) == 1)
+                {
+                    this.TakeDamage((int)((double)(2 * this.Level + 10) / 250.0 * (double)(this.Attack) / this.Defense * 40));
+                    Console.WriteLine(Name + " took damage due to confusion");
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
             }
+            else return true;
         }
         public void GiveAilment(string Ailment, int time)
         {
