@@ -66,7 +66,7 @@ namespace PokeHack
             Random rand = new Random();
             Move p1m = null, p2m = null;
             int clock1 = CalculateClock(p1, p2);
-            int clock2 = CalculateClock(p1, p2);
+            int clock2 = CalculateClock(p2, p1);
 
             //Pick strategies and moves
             if (clock1 < clock2)
@@ -231,7 +231,10 @@ namespace PokeHack
                 }
             }
             if (p1m == null)
-                p1m = PickMoveHighestPower(pOffense, pDefense);
+            {
+                p1m = PickMoveHighestPower(pDefense, pOffense);
+                Console.WriteLine(pDefense.Name + " has no defensive option");
+            }
             return p1m;
 
         }
