@@ -26,6 +26,7 @@ namespace PokeHack
         private Type Type2 = Type.None;
         public String Ailment = "";
         public int AilmentTime = -1;
+        public Random rand;
 
         // Cunstructor by name
         public Pokemon(string PokemonName, int level)
@@ -40,6 +41,8 @@ namespace PokeHack
 
             GenerateStats();
             GenerateMoves();
+
+            rand = new Random();
         }
 
         // Cunstructor by ID
@@ -58,6 +61,8 @@ namespace PokeHack
 
             GenerateStats();
             GenerateMoves();
+
+            rand = new Random();
         }
 
         private void GenerateStats()
@@ -89,7 +94,7 @@ namespace PokeHack
 
             if (PossibleMoves.Length > 4)
             {
-                Random rand = new Random();
+                Random randy = new Random();
                 int[] UsedMoves = new int[4];
                 for (int i = 0; i < 4; i++)
                 {
@@ -98,7 +103,7 @@ namespace PokeHack
                     do
                     {
                         alreadyHas = false;
-                        randNum = rand.Next(1, PossibleMoves.Length);
+                        randNum = randy.Next(1, PossibleMoves.Length);
                         foreach (int used in UsedMoves)
                             if (used == randNum)
                                 alreadyHas = true;
@@ -149,12 +154,12 @@ namespace PokeHack
         // Is the capable of attacking
         public bool CanAttack()
         {
-            Random rand = new Random();
+            int nummy = rand.Next(1, 100);
             if (Ailment == "")
                 return true;
             if (String.Compare(Ailment, "paralysis") == 0)
             {
-                if (rand.Next(1, 4) == 1)
+                if (nummy % 4 == 1)
                 {
                     Console.WriteLine(Name + " cannot operate due to paralysis");
                     return false;
@@ -167,7 +172,7 @@ namespace PokeHack
             }
             if (String.Compare(Ailment, "infatuation") == 0)
             {
-                if (rand.Next(1, 2) == 1)
+                if (nummy % 2 == 1)
                 {
                     Console.WriteLine(Name + " cannot operate due to infatuation");
                     return false;
@@ -196,7 +201,7 @@ namespace PokeHack
             }
             if (String.Compare(Ailment, "freeze") == 0)
             {
-                if (rand.Next(1, 5) == 1)
+                if (nummy % 5 == 1)
                 {
                     Ailment = "";
                     AilmentTime = -1;

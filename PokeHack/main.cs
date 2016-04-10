@@ -15,16 +15,17 @@ namespace PokeHack
         public static void Main()
         {
             Pokemon p1 = null, p2 = null;
-            Random rand = new Random();
+            Random randy = new Random();
             string Pokemon1 = null, Pokemon2 = null;
             bool ValidPokemon = true, testing = true;
             int level = 0;
 
             if (testing)
             {
+
                 p1 = new Pokemon(25, 100);
                 p2 = new Pokemon(69, 100);
-                Move m1 = new Move(10); //scratch
+                Move m1 = new Move(11); //scratch
                 Move m11 = new Move(1); //pound
                 Move m2 = new Move(48); //supersonic
                 Move m3 = new Move(95); //hypnosis
@@ -60,16 +61,16 @@ namespace PokeHack
 
                         if (level <= 0 || level > 100)
                         {
-                            level = rand.Next(1, 100);
+                            level = randy.Next(1, 100);
                             Console.WriteLine("Invalid level, using random level: " + level);
                         }
 
                         if (Pokemon1.CompareTo("random") == 0)
-                            p1 = new Pokemon(rand.Next(1, 721), level);
+                            p1 = new Pokemon(randy.Next(1, 721), level);
                         else
                             p1 = new Pokemon(Pokemon1, level);
                         if (Pokemon1.CompareTo("random") == 0)
-                            p2 = new Pokemon(rand.Next(1, 721), level);
+                            p2 = new Pokemon(randy.Next(1, 721), level);
                         else
                             p2 = new Pokemon(Pokemon2, level);
                     }
@@ -92,12 +93,12 @@ namespace PokeHack
                 {
                     CombatRound(p1, p2);
                 }
-                if (p1.HealthCurr < 0)
+                else if (p1.HealthCurr < 0)
                 {
                     Console.WriteLine(p1.Name + " has fainted");
                     break;
                 }
-                if (p2.HealthCurr < 0)
+                else if (p2.HealthCurr < 0)
                 {
                     Console.WriteLine(p2.Name + " has fainted");
                     break;
@@ -126,7 +127,6 @@ namespace PokeHack
 
         public static void CombatRound(Pokemon p1, Pokemon p2)
         {
-            Random rand = new Random();
             Move p1m = null, p2m = null;
             int clock1 = CalculateClock(p1, p2);
             int clock2 = CalculateClock(p2, p1);
@@ -160,7 +160,7 @@ namespace PokeHack
             {
                 if (p1.CanAttack()) //Enact Status Effects
                 {
-                    if (rand.Next(1, 100) < HitChance(p1m, p1, p2)) //Check for miss
+                    if (p1.rand.Next(1, 100) < HitChance(p1m, p1, p2)) //Check for miss
                     {
                         int damage = p1.MoveDamage(p1m, p2);
                         p2.TakeDamage(damage);
@@ -171,7 +171,7 @@ namespace PokeHack
                 }
                 if (p2.CanAttack() && p2.HealthCurr > 0)
                 {
-                    if (rand.Next(1, 100) < HitChance(p2m, p2, p1)) //Check for miss
+                    if (p2.rand.Next(1, 100) < HitChance(p2m, p2, p1)) //Check for miss
                     {
                         int damage = p2.MoveDamage(p2m, p1);
                         p1.TakeDamage(damage);
@@ -185,7 +185,7 @@ namespace PokeHack
             {
                 if (p2.CanAttack())
                 {
-                    if (rand.Next(1, 100) < HitChance(p2m, p2, p1)) //Check for miss
+                    if (p1.rand.Next(1, 100) < HitChance(p2m, p2, p1)) //Check for miss
                     {
                         int damage = p2.MoveDamage(p2m, p1);
                         p1.TakeDamage(damage);
@@ -196,7 +196,7 @@ namespace PokeHack
                 }
                 if (p1.CanAttack() && p1.HealthCurr > 0) //Enact Status Effects
                 {
-                    if (rand.Next(1, 100) < HitChance(p1m, p1, p2)) //Check for miss
+                    if (p2.rand.Next(1, 100) < HitChance(p1m, p1, p2)) //Check for miss
                     {
                         int damage = p1.MoveDamage(p1m, p2);
                         p2.TakeDamage(damage);
@@ -299,7 +299,6 @@ namespace PokeHack
             if (p1m == null)
             {
                 p1m = PickMoveHighestPower(pDefense, pOffense);
-                Console.WriteLine(pDefense.Name + " has no defensive option");
             }
             return p1m;
 
