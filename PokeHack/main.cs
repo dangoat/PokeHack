@@ -15,7 +15,7 @@ namespace PokeHack
             Pokemon p1 = null, p2 = null;
             Random randy = new Random();
             string Pokemon1 = null, Pokemon2 = null;
-            bool ValidPokemon = true, testing = true;
+            bool ValidPokemon = true, testing = false;
             int level = 0;
 
             if (testing)
