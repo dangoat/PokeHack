@@ -125,6 +125,7 @@ namespace PokeHack
                         if (p1.Ailment.CompareTo("") != 0)
                             Console.WriteLine(p1.Name + " has become " + p1.Ailment);
                     }
+                    p2.TakeHealRecoil(p2m.HealOrRecoil());
                 }
                 else Console.WriteLine(p2.Name + "'s " + p2m.Name + " missed");
                 if (p1.HealthCurr > 0)
@@ -139,6 +140,7 @@ namespace PokeHack
                             if (p2.Ailment.CompareTo("") != 0)
                                 Console.WriteLine(p2.Name + " has become " + p2.Ailment);
                         }
+                        p1.TakeHealRecoil(p1m.HealOrRecoil());
                     }
                     else Console.WriteLine(p1.Name + "'s " + p1m.Name + " missed");
                 }
@@ -209,6 +211,7 @@ namespace PokeHack
                 Math.Pow(prob, diff) * Math.Pow(1 - prob, clockOffense);
             return ToReturn;
         }
+
         private static int Fact(int n)
         {
             int ToReturn = 1;

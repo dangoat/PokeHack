@@ -115,6 +115,11 @@ namespace PokeHack
 			HealthCurr -= damage;
 		}
 
+        public void TakeHealRecoil(int healRecoil)
+        {
+            HealthCurr += healRecoil;
+        }
+
 		public int MoveDamage(Move move, Pokemon defender) {
             double damage = 0;
             if (String.Compare(move.DamageClass, "physical") == 0)
